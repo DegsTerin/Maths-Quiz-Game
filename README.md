@@ -1,7 +1,8 @@
 # Maths Quiz Game
 
+[![Quality](https://github.com/DegsTerin/Maths_Quiz_Game/actions/workflows/quality.yml/badge.svg)](https://github.com/DegsTerin/Maths_Quiz_Game/actions/workflows/quality.yml)
 [![Board](https://img.shields.io/badge/Board-Arduino_Uno-00979D?logo=arduino&logoColor=white)](https://www.arduino.cc/en/Main/ArduinoBoardUno)
-[![Simulation](https://img.shields.io/badge/Simulation-Wokwi-5C6BC0)](https://wokwi.com/projects/new/arduino-uno)
+[![Simulation](https://img.shields.io/badge/Simulation-Wokwi-5C6BC0)](#simulate-in-wokwi)
 [![Release](https://img.shields.io/badge/Release-v1.1.0-2E7D32)](https://github.com/DegsTerin/Maths_Quiz_Game/releases/tag/v1.1.0)
 [![Sponsor](https://img.shields.io/badge/Sponsor-DegsTerin-2563EB?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/DegsTerin)
 
@@ -250,9 +251,7 @@ tutorial/
 
 ## Simulate in Wokwi
 
-You can start from the Arduino Uno template:
-
-`https://wokwi.com/projects/new/arduino-uno`
+The repository includes the complete local Wokwi source bundle. Start from the [Arduino Uno template](https://wokwi.com/projects/new/arduino-uno) and import the files below.
 
 Recommended setup:
 
@@ -271,8 +270,10 @@ Notes:
 
 - The LCD address used by this project is `0x27`.
 - All local Wokwi files are stored in `simulation/`.
-- `simulation/wokwi-project.txt` stores the Wokwi project link or reference details.
+- `simulation/wokwi-project.txt` records the publication status and import instructions.
 - If a required library is missing, the simulation will not compile.
+
+There is currently no public Wokwi project ID stored in the repository. The badge links to these reproducible instructions instead of presenting the generic template as a live project.
 
 ![Wokwi simulation layout](simulation/wokwi.png)
 

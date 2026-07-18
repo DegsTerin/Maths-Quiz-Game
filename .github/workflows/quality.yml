@@ -1,0 +1,40 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install Arduino Uno core
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+
+      - name: Compile portfolio sketches
+        shell: bash
+        run: |
+          for sketch in \
+            arduino/maths-quiz-game-en-gb \
+            arduino/maths-quiz-game-en-gb-integers \
+            arduino/maths-quiz-game-pt-br \
+            arduino/maths-quiz-game-pt-br-integers
+          do
+            arduino-cli compile \
+              --fqbn arduino:avr:uno \
+              --libraries arduino/libraries \
+              "$sketch"
+          done

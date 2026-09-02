@@ -10,7 +10,7 @@ import {
   DEFAULT_LOCALE,
   SUPPORTED_LOCALES,
   translate,
-} from "./i18n.js?v=20260902-mode-shortcut";
+} from "./i18n.js?v=20260902-project-credit";
 import {
   readStoredPreference,
   storePreference,

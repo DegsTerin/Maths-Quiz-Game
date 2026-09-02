@@ -107,6 +107,7 @@ test("the mobile controls keep the standard single-row layout", () => {
   assert.match(getRule(".lcd-module"), /align-self:\s*start/);
   assert.match(getRule(".lcd-module"), /margin-top:\s*calc\([\s\S]*clamp\(0\.82rem,\s*2\.45vw,\s*1\.6rem\)[\s\S]*clamp\(28px,\s*4\.25vw,\s*44px\)[\s\S]*clamp\(36px,\s*5vw,\s*54px\)/);
   assert.match(stylesheet, /@media \(max-width:\s*430px\)[\s\S]*?\.lcd-module\s*{[^}]*width:\s*min\(100%,\s*clamp\(100px,\s*38vw,\s*160px\)\);[^}]*margin-top:\s*calc\(clamp\(0\.7rem,\s*3\.25vw,\s*0\.92rem\) \+ 7px\);[^}]*padding:\s*3px/);
+  assert.match(stylesheet, /@media \(max-width:\s*430px\)[\s\S]*?\.lcd-screen\s*{[^}]*font-size:\s*clamp\(0\.515625rem,\s*2\.8vw,\s*0\.78rem\);[^}]*letter-spacing:\s*0/);
   assert.match(stylesheet, /@media \(max-width:\s*430px\)[\s\S]*?\.control-panel\s*{[^}]*padding-inline:\s*clamp\(8px,\s*3vw,\s*12px\)/);
   assert.match(stylesheet, /@media \(max-width:\s*405px\)[\s\S]*?\.control-panel\s*{[^}]*grid-template-columns:\s*46px\s+minmax\(0,\s*1fr\)\s+64px/);
   assert.doesNotMatch(stylesheet, /grid-template-areas:\s*"lcd lcd"\s*"reset mode"/);
@@ -122,9 +123,9 @@ test("correct and incorrect indicators use separate labelled plates", () => {
 
 test("the page requests the current tab-free stylesheet and iPhone feedback script", () => {
   assert.match(page, /rel="icon" href="\.\/favicon\.svg\?v=20260902"/);
-  assert.match(page, /href="\.\/styles\.css\?v=20260902-mobile-clean-controls"/);
-  assert.match(page, /src="\.\/js\/app\.js\?v=20260902-iphone-feedback"/);
+  assert.match(page, /href="\.\/styles\.css\?v=20260902-larger-lcd-type"/);
+  assert.match(page, /src="\.\/js\/app\.js\?v=20260902-lcd-project-credit"/);
   assert.match(application, /from "\.\/buzzer\.js\?v=20260902-iphone-feedback"/);
   assert.match(application, /from "\.\/game-engine\.js\?v=20260902-mode-shortcut"/);
-  assert.match(application, /from "\.\/i18n\.js\?v=20260902-mode-shortcut"/);
+  assert.match(application, /from "\.\/i18n\.js\?v=20260902-project-credit"/);
 });

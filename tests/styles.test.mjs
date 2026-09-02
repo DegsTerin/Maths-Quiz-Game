@@ -55,6 +55,15 @@ test("the enclosure follows the physical front-panel proportions", () => {
   assert.match(getRule(".answer-card"), /align-content:\s*space-between/);
 });
 
+test("the enclosure has no protruding case tabs", () => {
+  assert.doesNotMatch(page, /class="case-tab/);
+  assert.doesNotMatch(stylesheet, /\.case-tab/);
+  assert.doesNotMatch(stylesheet, /--case-tab/);
+  assert.match(getRule(".machine"), /border:\s*2px solid var\(--machine-border\)/);
+  assert.match(getRule(".machine::before"), /border:\s*2px solid var\(--machine-inner-border\)/);
+  assert.match(getRule(".machine::after"), /var\(--screw-core\)/);
+});
+
 test("the display housing matches the SVG view box", () => {
   assert.match(getRule(".segment-display"), /aspect-ratio:\s*232\s*\/\s*96/);
   assert.match(getRule(".matrix-frame"), /width:\s*min\(100%,\s*220px\)/);
@@ -75,9 +84,9 @@ test("correct and incorrect indicators use separate labelled plates", () => {
   assert.match(getRule(".feedback-lamp"), /box-shadow:[\s\S]*var\(--feedback-plate-shadow\)/);
 });
 
-test("the page requests the current dark-option-label stylesheet and shortcut script", () => {
+test("the page requests the current tab-free stylesheet and shortcut script", () => {
   assert.match(page, /rel="icon" href="\.\/favicon\.svg\?v=20260902"/);
-  assert.match(page, /href="\.\/styles\.css\?v=20260902-dark-option-labels"/);
+  assert.match(page, /href="\.\/styles\.css\?v=20260902-no-case-tabs"/);
   assert.match(page, /src="\.\/js\/app\.js\?v=20260902-mode-shortcut"/);
   assert.match(application, /from "\.\/game-engine\.js\?v=20260902-mode-shortcut"/);
   assert.match(application, /from "\.\/i18n\.js\?v=20260902-mode-shortcut"/);

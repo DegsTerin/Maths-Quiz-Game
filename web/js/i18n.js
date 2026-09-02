@@ -1,4 +1,4 @@
-export const DEFAULT_LOCALE = "pt-BR";
+export const DEFAULT_LOCALE = "en-GB";
 export const SUPPORTED_LOCALES = Object.freeze(["pt-BR", "en-GB"]);
 
 const MESSAGES = Object.freeze({

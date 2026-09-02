@@ -7,8 +7,8 @@ import {
   translate,
 } from "../web/js/i18n.js";
 
-test("the interface exposes Brazilian Portuguese and British English", () => {
-  assert.equal(DEFAULT_LOCALE, "pt-BR");
+test("the interface defaults to British English and also exposes Brazilian Portuguese", () => {
+  assert.equal(DEFAULT_LOCALE, "en-GB");
   assert.deepEqual(SUPPORTED_LOCALES, ["pt-BR", "en-GB"]);
   assert.equal(translate("pt-BR", "heading"), "Jogo de Matemática");
   assert.equal(translate("en-GB", "heading"), "Maths Quiz Game");
@@ -16,7 +16,7 @@ test("the interface exposes Brazilian Portuguese and British English", () => {
   assert.equal(translate("en-GB", "themeLight"), "Light");
 });
 
-test("translations interpolate accessible values and fall back to Portuguese", () => {
+test("translations interpolate accessible values and fall back to British English", () => {
   assert.equal(
     translate("en-GB", "chooseOptionValue", { number: 2, value: "7.50" }),
     "Choose option 2: 7.50",
@@ -25,5 +25,5 @@ test("translations interpolate accessible values and fall back to Portuguese", (
     translate("pt-BR", "chooseOptionValue", { number: 2, value: "7,50" }),
     "Escolher opção 2: 7,50",
   );
-  assert.equal(translate("unsupported", "heading"), "Jogo de Matemática");
+  assert.equal(translate("unsupported", "heading"), "Maths Quiz Game");
 });

@@ -1,5 +1,7 @@
 import { Difficulty, MathsQuizEngine, Operation, Status } from "./game-engine.js";
+import { scheduleWrongAnswerBuzzer } from "./buzzer.js";
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, translate } from "./i18n.js";
+import { readStoredPreference, storePreference } from "./preferences.js";
 import { parseDisplayCharacters } from "./segment-display.js";
 
 const engine = new MathsQuizEngine();
@@ -153,22 +155,7 @@ function t(key, variables = {}) {
   return translate(currentLocale, key, variables);
 }
 
-function readStoredPreference(key, allowedValues, fallback) {
-  try {
-    const value = window.localStorage.getItem(key);
-    return allowedValues.includes(value) ? value : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function storePreference(key, value) {
-  try {
-    window.localStorage.setItem(key, value);
-  } catch {
-    // The preference still applies for this session when storage is unavailable.
-  }
-}
+const getLocalStorage = () => window.localStorage;
 
 function localiseDisplayValue(value) {
   return currentLocale === "pt-BR" ? value.replace(".", ",") : value;
@@ -202,7 +189,7 @@ function applyTheme(theme, { persist = false, announceChange = false } = {}) {
     button.setAttribute("aria-pressed", String(button.dataset.themeChoice === selectedTheme));
   });
 
-  if (persist) storePreference(STORAGE_KEYS.theme, selectedTheme);
+  if (persist) storePreference(getLocalStorage, STORAGE_KEYS.theme, selectedTheme);
   if (announceChange) {
     announce(t("themeChanged", { theme: t(`theme${selectedTheme === "light" ? "Light" : "Dark"}`).toLocaleLowerCase(currentLocale) }));
   }
@@ -216,7 +203,7 @@ function applyLocale(locale, { persist = false, announceChange = false } = {}) {
   updateDifficultyVisual();
   drawMatrix(displayedMatrixOperation);
 
-  if (persist) storePreference(STORAGE_KEYS.locale, currentLocale);
+  if (persist) storePreference(getLocalStorage, STORAGE_KEYS.locale, currentLocale);
   if (announceChange) announce(t("languageChanged"));
 }
 
@@ -513,21 +500,7 @@ async function playWrongFeedback() {
     audioContext ??= new AudioContext();
     if (audioContext.state === "suspended") await audioContext.resume();
 
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    const now = audioContext.currentTime;
-
-    oscillator.type = "square";
-    oscillator.frequency.setValueAtTime(145, now);
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.035, now + 0.015);
-    gain.gain.setValueAtTime(0.035, now + 0.88);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.98);
-
-    oscillator.connect(gain);
-    gain.connect(audioContext.destination);
-    oscillator.start(now);
-    oscillator.stop(now + 1);
+    scheduleWrongAnswerBuzzer(audioContext);
   } catch {
     // Audio feedback is optional, matching the optional active buzzer module.
   }
@@ -651,8 +624,13 @@ document.addEventListener("keydown", (event) => {
 });
 
 initialiseMatrix();
-applyTheme(readStoredPreference(STORAGE_KEYS.theme, THEMES, "dark"));
+applyTheme(readStoredPreference(getLocalStorage, STORAGE_KEYS.theme, THEMES, "dark"));
 applyLocale(
-  readStoredPreference(STORAGE_KEYS.locale, SUPPORTED_LOCALES, DEFAULT_LOCALE),
+  readStoredPreference(
+    getLocalStorage,
+    STORAGE_KEYS.locale,
+    SUPPORTED_LOCALES,
+    DEFAULT_LOCALE,
+  ),
 );
 startFreshRound();

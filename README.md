@@ -1,38 +1,190 @@
 # Maths Quiz Game
 
-[![Board](https://img.shields.io/badge/Board-Arduino_Uno-00979D?logo=arduino&logoColor=white)](https://www.arduino.cc/en/Main/ArduinoBoardUno)
-[![Simulation](https://img.shields.io/badge/Simulation-Wokwi-5C6BC0)](https://wokwi.com/projects/new/arduino-uno)
-[![Release](https://img.shields.io/badge/Release-v1.1.0-2E7D32)](https://github.com/DegsTerin/Maths_Quiz_Game/releases/tag/v1.1.0)
-[![Sponsor](https://img.shields.io/badge/Sponsor-DegsTerin-2563EB?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/DegsTerin)
+[![Play online](https://img.shields.io/badge/play-online-2ea44f?logo=githubpages&logoColor=white)](https://degsterin.github.io/Maths-Quiz-Game/)
+[![Test and deploy](https://github.com/DegsTerin/Maths-Quiz-Game/actions/workflows/deploy-pages.yml/badge.svg?branch=main)](https://github.com/DegsTerin/Maths-Quiz-Game/actions/workflows/deploy-pages.yml)
+[![Latest release](https://img.shields.io/github/v/release/DegsTerin/Maths-Quiz-Game)](https://github.com/DegsTerin/Maths-Quiz-Game/releases/latest)
+[![Licence: MIT](https://img.shields.io/github/license/DegsTerin/Maths-Quiz-Game)](LICENSE)
 
-An interactive Arduino-based maths quiz system with adaptive difficulty, multiple display modules, physical answer buttons, score tracking, and a complete Wokwi simulation setup.
+An interactive maths quiz available as both a browser game and an Arduino Uno build. The project recreates the physical control panel with four arithmetic operations, three selectable difficulty levels, multiple-choice answers and score tracking.
 
-## Project origin
+**[Play the browser edition](https://degsterin.github.io/Maths-Quiz-Game/)**
 
-The [`tutorial/`](tutorial/) folder contains the original initial project, preserved in this repository as version zero (`v0`), now reorganized into Arduino, electronics, vector, and document subfolders for easier reference.
+![Finished Maths Quiz Game enclosure](assets/media/maths-quiz-game-cover.png)
 
-## Project summary
+## Overview
 
-This project presents arithmetic challenges using dedicated hardware modules:
+| Edition | Implementation | Entry point |
+| --- | --- | --- |
+| Browser | Dependency-free JavaScript ES modules, CSS and semantic HTML | [Live GitHub Pages game](https://degsterin.github.io/Maths-Quiz-Game/) |
+| Arduino | Arduino C++ firmware for the physical control panel | [arduino/](arduino/) |
+| Wokwi | Local reference diagram and library configuration | [simulation/](simulation/) |
 
-- two TM1637 displays for the operands
-- three TM1637 displays for the answer options
-- one 8x8 LED matrix for the selected operation
-- one 16x2 I2C LCD for level and score feedback
-- three answer buttons, one reset button, and one potentiometer for difficulty selection
+The browser engine reproduces the PT-BR decimal Arduino variant. The interface itself can be switched independently between British English and Brazilian Portuguese.
 
-Main sketches:
+## Features
 
-- English (en-gb) - with decimal rounds: `arduino/maths-quiz-game-en-gb/maths-quiz-game-en-gb.ino`
-- English (en-gb) - integers only (no decimal rounds): `arduino/maths-quiz-game-en-gb-integers/maths-quiz-game-en-gb-integers.ino`
-- Portuguese (pt-br) - with decimal rounds: `arduino/maths-quiz-game-pt-br/maths-quiz-game-pt-br.ino`
-- Portuguese (pt-br) - integers only (no decimal rounds): `arduino/maths-quiz-game-pt-br-integers/maths-quiz-game-pt-br-integers.ino`
+### Browser edition
+
+- Addition, subtraction, multiplication and division
+- Easy, medium and hard difficulty levels
+- Faithful LED matrix, TM1637-style displays, LCD scoreboard and arcade controls
+- Responsive layout for desktop, tablet and mobile screens
+- Dark and light colour schemes
+- British English and Brazilian Portuguese interfaces
+- Persistent theme and language preferences
+- Keyboard controls and accessible labels, status announcements and live regions
+- Two-pulse buzzer sound after an incorrect answer, generated with the Web Audio API
+- No runtime dependencies and no build step
+
+### Arduino edition
+
+- Five physical TM1637 displays for operands and answer options
+- 8x8 LED matrix operation animation
+- 16x2 I2C LCD for difficulty and score feedback
+- Three answer buttons, a reset button and potentiometer-based difficulty selection
+- Dedicated correct and incorrect feedback LEDs
+- Decimal and integer-only firmware variants in both supported interface languages
+- Optional active buzzer or driver-equipped vibration module for incorrect-answer feedback
+
+## Play in the browser
+
+The published game opens in dark mode and British English on a first visit. Theme and language controls are available at the top of the page, and valid saved choices continue to take precedence on later visits.
+
+| Control | Action |
+| --- | --- |
+| Answer buttons or <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd> | Select an answer |
+| Red reset button or <kbd>R</kbd> | Reset the score and start a new round |
+| Mode slider or left/right arrow keys | Select the difficulty for the next round |
+| Theme controls | Switch between dark and light modes |
+| Language controls | Switch between en-GB and pt-BR |
+
+An incorrect answer keeps the same problem available for another attempt and sounds the browser buzzer when audio is permitted by the browser. A correct answer advances to a new round after the display feedback animation.
+
+### Run locally
+
+From the repository root, serve the <code>web/</code> directory with any local HTTP server. For example, with Python 3:
+
+~~~bash
+python -m http.server 4173 --directory web
+~~~
+
+Then open [http://localhost:4173/](http://localhost:4173/). Opening <code>web/index.html</code> directly is not recommended because the game uses JavaScript modules.
+
+### Test
+
+The automated suite uses the Node.js built-in test runner. CI currently runs on Node.js 24:
+
+~~~bash
+node --test tests/*.test.mjs
+~~~
+
+Every relevant push to <code>main</code> runs the tests before the static site is deployed through the [GitHub Pages workflow](https://github.com/DegsTerin/Maths-Quiz-Game/actions/workflows/deploy-pages.yml).
+
+### Browser architecture
+
+| Path | Responsibility |
+| --- | --- |
+| <code>web/index.html</code> | Semantic structure and first-paint defaults |
+| <code>web/styles.css</code> | Responsive enclosure, hardware components and themes |
+| <code>web/js/app.js</code> | UI state, interaction, animation, audio and accessibility |
+| <code>web/js/buzzer.js</code> | Incorrect-answer Web Audio signal |
+| <code>web/js/game-engine.js</code> | Round generation, scoring and Arduino-compatible game rules |
+| <code>web/js/i18n.js</code> | en-GB and pt-BR interface messages |
+| <code>web/js/preferences.js</code> | Safe persistent preference handling |
+| <code>web/js/segment-display.js</code> | Four-digit display parsing and rendering support |
+
+## Arduino firmware
+
+Choose the sketch that matches the required language and number format:
+
+| Language | Number format | Sketch |
+| --- | --- | --- |
+| British English | Decimal rounds | [maths-quiz-game-en-gb.ino](arduino/maths-quiz-game-en-gb/maths-quiz-game-en-gb.ino) |
+| British English | Integers only | [maths-quiz-game-en-gb-integers.ino](arduino/maths-quiz-game-en-gb-integers/maths-quiz-game-en-gb-integers.ino) |
+| Brazilian Portuguese | Decimal rounds | [maths-quiz-game-pt-br.ino](arduino/maths-quiz-game-pt-br/maths-quiz-game-pt-br.ino) |
+| Brazilian Portuguese | Integers only | [maths-quiz-game-pt-br-integers.ino](arduino/maths-quiz-game-pt-br-integers/maths-quiz-game-pt-br-integers.ino) |
+
+### Game flow
+
+1. Select the difficulty with the potentiometer.
+2. Watch the selected operation animate on the LED matrix.
+3. Solve the operands shown on the first two displays.
+4. Press the button below the correct answer display.
+5. Read the correct or incorrect feedback and updated score on the LCD.
+6. Use the reset button whenever the score should be cleared.
+
+Decimal firmware may generate decimal rounds in 10% of easy, 20% of medium and 30% of hard rounds. Integer-only firmware keeps all operands and results as integers, including division.
+
+### Hardware
+
+- 1 Arduino Uno-compatible board
+- 1 I2C 16x2 LCD; the firmware scans common addresses and uses <code>0x27</code> as its fallback
+- 1 8x8 LED matrix with a <code>LedControl</code>-compatible driver
+- 5 four-digit TM1637 displays
+- 3 answer buttons and 1 reset button
+- 1 potentiometer
+- 2 feedback LEDs
+- 1 protoboard or protoshield module for wiring integration
+
+Answer and reset inputs use <code>INPUT_PULLUP</code>: each button is connected between its input and <code>GND</code>, the pressed state is <code>LOW</code>, and external pull-down resistors are not required.
+
+### Pin mapping
+
+| Component | Arduino pin |
+| --- | --- |
+| LED matrix <code>DIN</code> | <code>7</code> |
+| LED matrix <code>CLK</code> | <code>9</code> |
+| LED matrix <code>CS</code> | <code>8</code> |
+| Shared TM1637 <code>DIO</code> | <code>10</code> |
+| TM1637 clocks 1–5 | <code>2</code>, <code>3</code>, <code>4</code>, <code>5</code>, <code>6</code> |
+| Answer buttons 1–3 | <code>A1</code>, <code>A2</code>, <code>A3</code> |
+| Reset button | <code>11</code> |
+| Correct feedback LED | <code>12</code> |
+| Incorrect feedback LED | <code>13</code> |
+| Difficulty potentiometer | <code>A0</code> |
+
+An optional active buzzer or driver-equipped vibration module can use the incorrect-feedback control signal on pin <code>13</code> when connected with the appropriate module input and <code>GND</code>.
+
+### Required libraries
+
+- [TM1637Display](arduino/libraries/TM1637/)
+- [LiquidCrystal_I2C](arduino/libraries/LiquidCrystal_I2C/)
+- [LedControl](arduino/libraries/LedControl/)
+
+The compatible library sources used by this project are included under [arduino/libraries/](arduino/libraries/).
+
+## Wokwi simulation
+
+The repository contains local Wokwi assets rather than a hosted public simulation:
+
+- [simulation/diagram.json](simulation/diagram.json) — hardware layout
+- [simulation/libraries.txt](simulation/libraries.txt) — required libraries
+- [simulation/wokwi-project.txt](simulation/wokwi-project.txt) — template and source note
+
+The saved diagram reflects an earlier pull-down/5 V button circuit, while the current firmware uses <code>INPUT_PULLUP</code>. Before using it with the current sketches, connect each answer and reset button between its input and <code>GND</code> and remove the external pull-down resistors. Then create an [Arduino Uno template](https://wokwi.com/projects/new/arduino-uno), copy one firmware sketch into <code>sketch.ino</code>, and use the adjusted diagram together with <code>simulation/libraries.txt</code>.
+
+![Wokwi simulation layout](simulation/wokwi.png)
+
+## Repository structure
+
+~~~text
+.
+├── .github/workflows/    # Test and GitHub Pages deployment
+├── arduino/              # Firmware variants and bundled libraries
+├── assets/media/         # Build photographs and demonstrations
+├── design/vector/        # Editable enclosure artwork
+├── docs/                 # Tutorial and release documentation
+├── hardware/electronics/ # Electronics and construction files
+├── simulation/           # Local Wokwi project assets
+├── tests/                # Browser-engine and UI regression tests
+├── tutorial/             # Preserved original v0 project
+└── web/                  # Published browser edition
+~~~
 
 ## Gallery
 
-### Finished build
-
-![Finished maths quiz game enclosure](assets/media/maths-quiz-game-cover.png)
+<details>
+<summary>Prototype, acrylic enclosure and wiring photographs</summary>
 
 ### Prototype during assembly
 
@@ -40,78 +192,9 @@ Main sketches:
 
 ![Top view of the prototype during assembly](assets/media/assembly-top.jpg)
 
-### Demonstration preview
-
-![Animated demonstration of the maths quiz game](assets/media/demonstration.gif)
-
-[Open the full demonstration video](assets/media/demonstration.mp4)
-
-## Features
-
-- Addition, subtraction, multiplication, and division
-- Three difficulty levels: easy, medium, and hard
-- Animated operation selection on the 8x8 LED matrix
-- Three multiple-choice answers shown on TM1637 displays
-- Button color LEDs can light up immediately when each button is pressed
-- Right and wrong feedback using dedicated LEDs
-- Right and wrong score tracking on the I2C LCD
-- Potentiometer-based difficulty selection
-- Browser-based simulation support with Wokwi
-
-## Hardware used
-
-- 1 Arduino board
-- 1 I2C 16x2 LCD at address `0x27`
-- 1 8x8 LED matrix using a `LedControl`-compatible driver
-- 5 four-digit TM1637 displays
-- 3 answer buttons
-- 1 reset button
-- 1 potentiometer
-- 2 feedback LEDs
-- 3 button indicator LEDs (or illuminated button LEDs)
-- 1 protoboard module / protoshield module for wiring integration
-- No external resistors for the answer/reset buttons (`INPUT_PULLUP` is used)
-
-## Pin mapping
-
-Configuration defined in the sketch:
-
-- 8x8 matrix
-  - `DIN`: pin `7`
-  - `CLK`: pin `8`
-  - `CS`: pin `9`
-- TM1637 displays
-  - Shared DIO: pin `10`
-  - CLK display 1: pin `2`
-  - CLK display 2: pin `3`
-  - CLK display 3: pin `4`
-  - CLK display 4: pin `5`
-  - CLK display 5: pin `6`
-- Answer buttons
-  - Button 1: `A1`
-  - Button 2: `A2`
-  - Button 3: `A3`
-- Reset button: pin `11`
-- Right LED: pin `12`
-- Wrong LED: pin `13`
-- Potentiometer: `A0`
-
-Optional feedback module on wrong answer output:
-
-- You can connect an active buzzer module (bip) or a vibracall vibration module together with the wrong LED signal on pin `13` (using the module input + `GND`) for audible or haptic feedback.
-
-Construction and enclosure variants:
-
-- Main build version in MDF
-- Second build version in acrylic
-
-## Additional build photos
-
-### Acrylic enclosure version
+### Acrylic enclosure
 
 ![Acrylic enclosure front view](assets/media/acrylic-front.png)
-
-### Rear wiring with protoshield/protoboard module
 
 ![Rear wiring overview with protoshield](assets/media/acrylic-rear-wiring.png)
 
@@ -119,184 +202,26 @@ Construction and enclosure variants:
 
 ![Arduino and protoshield module](assets/media/arduino-protoshield.png)
 
-Important wiring update:
+</details>
 
-- Answer and reset buttons now use `INPUT_PULLUP`
-- Pressed state is `LOW`
-- Each button must be wired between input pin and `GND`
-- External 10k pull-down resistors are no longer required for these buttons
+### Demonstration
 
-## How the game works
+![Animated demonstration of Maths Quiz Game](assets/media/demonstration.gif)
 
-1. The potentiometer sets the current difficulty level.
-2. The system selects an operation and animates it on the 8x8 matrix.
-3. Two displays show the operands.
-4. Three displays show the answer options.
-5. The player presses one of the three answer buttons.
-6. The system updates the score and shows right or wrong feedback.
-7. The reset button clears the score and restarts the cycle.
+[Open the full demonstration video](assets/media/demonstration.mp4)
 
-## Difficulty behaviour
+## Project history
 
-The generated values change according to the selected level:
+The [tutorial/](tutorial/) directory preserves the original project as version zero (<code>v0</code>), organised into Arduino, electronics, vector and document subdirectories. The current repository builds on that material with maintained firmware variants, documented Wokwi reference assets, automated browser tests and a deployed web edition.
 
-- Easy: smaller values and a higher chance of simpler calculations
-- Medium: wider ranges and a more balanced mix of operations
-- Hard: larger values and a stronger weighting towards multiplication and division
+## Releases
 
-Decimal behaviour by sketch variant:
+Versioned hardware, documentation and project milestones are available on the [releases page](https://github.com/DegsTerin/Maths-Quiz-Game/releases/latest).
 
-- Decimal variant (`maths-quiz-game-en-gb.ino` and `maths-quiz-game-pt-br.ino`):
-  - Easy: 10% of rounds may include decimal operands/results
-  - Medium: 20%
-  - Hard: 30%
-- Integer-only variant (`maths-quiz-game-en-gb-integers.ino` and `maths-quiz-game-pt-br-integers.ino`):
-  - No decimal operands
-  - No decimal results
-  - Division is generated to keep integer results
+## Licence
 
-## Libraries
-
-Libraries used by the sketch:
-
-- `TM1637Display`
-- `LiquidCrystal_I2C`
-- `LedControl`
-
-Libraries included in the repository:
-
-- `arduino/libraries/TM1637`
-- `arduino/libraries/LiquidCrystal_I2C`
-- `arduino/libraries/LedControl`
-
-Reference image:
-
-![Bundled Arduino libraries overview](arduino/libraries/libraries.png)
-
-## Repository structure
-
-```text
-arduino/
-|-- libraries/
-|   |-- LedControl/
-|   |-- LiquidCrystal_I2C/
-|   |-- TM1637/
-|   `-- libraries.png
-|-- maths-quiz-game-en-gb/
-|   `-- maths-quiz-game-en-gb.ino
-|-- maths-quiz-game-en-gb-integers/
-|   `-- maths-quiz-game-en-gb-integers.ino
-|-- maths-quiz-game-pt-br/
-|   `-- maths-quiz-game-pt-br.ino
-`-- maths-quiz-game-pt-br-integers/
-    `-- maths-quiz-game-pt-br-integers.ino
-
-assets/
-`-- media/
-    |-- acrylic-front.png
-    |-- acrylic-rear-wiring.png
-    |-- arduino-protoshield.png
-    |-- maths-quiz-game-cover.png
-    |-- assembly-front.jpg
-    |-- assembly-top.jpg
-    |-- demonstration.gif
-    |-- demonstration.mp4
-    `-- protoshield-close.png
-
-design/
-`-- vector/
-    |-- maths-box.ai
-    `-- maths-box-v8.ai
-
-docs/
-|-- github-sponsors-kit.md
-|-- project-tutorial.docx
-|-- release-v1.0.0.md
-`-- release-v1.1.0.md
-
-hardware/
-`-- electronics/
-    |-- maths-quiz-game.pdf
-    |-- maths-quiz-game.psd
-    `-- supporting files
-
-simulation/
-|-- diagram.json
-|-- libraries.txt
-|-- wokwi.png
-`-- wokwi-project.txt
-
-tutorial/
-|-- Arduino/
-|   |-- libraries/
-|   `-- MPA-Matematica/
-|-- Eletrônica/
-|-- Vetor/
-|-- README.md
-`-- Tutorial.docx
-```
-
-## Run on hardware
-
-1. Open the Arduino IDE.
-2. Install the required libraries if needed.
-3. Open one sketch folder:
-   - `arduino/maths-quiz-game-en-gb/` or
-   - `arduino/maths-quiz-game-en-gb-integers/` or
-   - `arduino/maths-quiz-game-pt-br/` or
-   - `arduino/maths-quiz-game-pt-br-integers/`
-4. Connect the Arduino board.
-5. Compile and upload the sketch.
-
-## Simulate in Wokwi
-
-You can start from the Arduino Uno template:
-
-`https://wokwi.com/projects/new/arduino-uno`
-
-Recommended setup:
-
-1. Create a new Arduino Uno project in Wokwi.
-2. Replace the default `sketch.ino` by copying code from one of:
-   - `arduino/maths-quiz-game-en-gb/maths-quiz-game-en-gb.ino`
-   - `arduino/maths-quiz-game-en-gb-integers/maths-quiz-game-en-gb-integers.ino`
-   - `arduino/maths-quiz-game-pt-br/maths-quiz-game-pt-br.ino`
-   - `arduino/maths-quiz-game-pt-br-integers/maths-quiz-game-pt-br-integers.ino`
-3. Replace the default `diagram.json` with `simulation/diagram.json`.
-4. Replace or create `libraries.txt` using `simulation/libraries.txt`.
-5. Confirm that `TM1637Display`, `LiquidCrystal_I2C`, and `LedControl` are available in the project.
-6. Start the simulation.
-
-Notes:
-
-- The LCD address used by this project is `0x27`.
-- All local Wokwi files are stored in `simulation/`.
-- `simulation/wokwi-project.txt` stores the Wokwi project link or reference details.
-- If a required library is missing, the simulation will not compile.
-
-![Wokwi simulation layout](simulation/wokwi.png)
-
-## Supporting materials
-
-The repository also includes:
-
-- electronics files in `hardware/electronics`
-- vector design files in `design/vector`
-- a project tutorial document in `docs/project-tutorial.docx`
-- a sponsor support kit in `docs/github-sponsors-kit.md`
-- the original initial project in `tutorial/`, kept as version zero (`v0`) and reorganized with its own `tutorial/README.md`
-- a historical tutorial document in `tutorial/Tutorial.docx`
-- prototype photos and media in `assets/media`
-- complete Wokwi simulation files in `simulation`
-
-## Notes
-
-- This project is released under the MIT License. See `LICENSE`.
-- The repository combines source code, design assets, electronics documentation, and simulation files in one place.
-- The file `hardware/electronics/maths-quiz-game.txt` appears to use inconsistent encoding and was not treated as a primary documentation source.
+This project is available under the [MIT Licence](LICENSE).
 
 ## Support
 
-If this project helps you, consider sponsoring ongoing development:
-
-- GitHub Sponsors: `https://github.com/sponsors/DegsTerin`
+If this project is useful to you, you can support its continued development through [GitHub Sponsors](https://github.com/sponsors/DegsTerin).

@@ -25,7 +25,7 @@
         // The default dark theme remains active when storage is unavailable.
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260902-contained-shortcuts">
+    <link rel="stylesheet" href="./styles.css?v=20260902-mobile-clean-controls">
   </head>
   <body>
     <div class="ambient-light" aria-hidden="true"></div>
@@ -128,7 +128,6 @@
                     <span class="arcade-button__cap"></span>
                   </span>
                 </button>
-                <kbd class="key-hint" aria-hidden="true">1</kbd>
               </div>
             </article>
 
@@ -146,7 +145,6 @@
                     <span class="arcade-button__cap"></span>
                   </span>
                 </button>
-                <kbd class="key-hint" aria-hidden="true">2</kbd>
               </div>
             </article>
 
@@ -164,7 +162,6 @@
                     <span class="arcade-button__cap"></span>
                   </span>
                 </button>
-                <kbd class="key-hint" aria-hidden="true">3</kbd>
               </div>
             </article>
           </section>
@@ -172,11 +169,10 @@
           <section class="control-panel hardware-panel" aria-label="Controls and scoreboard" data-i18n-aria-label="controlsLabel">
             <div class="reset-control">
               <span class="control-label hardware-title" data-i18n="reset">Reset</span>
-              <div class="control-shortcut-row">
+              <div class="control-button-row">
                 <button class="reset-button" id="reset-button" type="button" aria-label="Reset the score" data-i18n-aria-label="resetScore">
                   <span aria-hidden="true"></span>
                 </button>
-                <kbd>R</kbd>
               </div>
             </div>
 
@@ -189,11 +185,10 @@
 
             <div class="mode-control">
               <label class="hardware-title" for="difficulty-control" data-i18n="modeLabel">Mode</label>
-              <div class="control-shortcut-row">
+              <div class="control-button-row">
                 <div class="rotary-control" aria-hidden="true">
                   <span class="rotary-control__pointer"></span>
                 </div>
-                <kbd>M</kbd>
               </div>
               <input
                 id="difficulty-control"

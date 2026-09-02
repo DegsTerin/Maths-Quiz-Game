@@ -67,9 +67,6 @@
   --control-metal-dark: #303a41;
   --control-metal-shadow: #151b20;
   --hardware-focus: #9bdcff;
-  --hardware-key-text: #d5e0e8;
-  --hardware-key-surface: #17232d;
-  --hardware-key-border: #53616d;
   --lamp-border: #687681;
   --page-text: #eaf2ff;
   --page-heading: #f7fbff;
@@ -155,9 +152,6 @@ html[data-theme="light"] {
   --control-metal-dark: #777c7b;
   --control-metal-shadow: #505656;
   --hardware-focus: #161f2b;
-  --hardware-key-text: #555e65;
-  --hardware-key-surface: #e6e4dd;
-  --hardware-key-border: #a6aaa8;
   --lamp-border: #858b8d;
   --page-bg: #eef4f7;
   --page-text: #17283a;
@@ -682,8 +676,7 @@ kbd {
 }
 
 .answer-button-row,
-.control-shortcut-row {
-  position: relative;
+.control-button-row {
   display: grid;
   width: fit-content;
   place-items: center;
@@ -693,13 +686,6 @@ kbd {
 .answer-button-row {
   max-width: 100%;
   min-width: 0;
-}
-
-.answer-button-row > .key-hint,
-.control-shortcut-row > kbd {
-  position: absolute;
-  bottom: 0;
-  left: calc(100% + clamp(5px, 1vw, 12px));
 }
 
 .arcade-button {
@@ -771,18 +757,6 @@ kbd {
   filter: grayscale(0.25) opacity(0.72);
 }
 
-.key-hint {
-  display: grid;
-  width: 24px;
-  height: 24px;
-  place-items: center;
-  border-radius: 7px;
-  color: #eaf1f6;
-  background: #1f2932;
-  box-shadow: 0 3px 0 #090d10;
-  font: 800 0.7rem/1 ui-monospace, SFMono-Regular, Consolas, monospace;
-}
-
 .control-panel {
   display: grid;
   grid-template-columns: minmax(80px, 0.7fr) minmax(240px, 2.2fr) minmax(150px, 1fr);
@@ -795,7 +769,12 @@ kbd {
 .mode-control {
   display: grid;
   gap: 8px;
+  align-self: start;
   justify-items: center;
+}
+
+.reset-control .control-button-row {
+  margin-top: calc(clamp(28px, 4.25vw, 44px) - clamp(21px, 3.5vw, 33px));
 }
 
 .reset-button {
@@ -828,16 +807,16 @@ kbd {
   box-shadow: inset 0 2px 6px rgb(70 0 0 / 36%);
 }
 
-.reset-control kbd,
-.mode-control kbd {
-  color: var(--hardware-key-text);
-  background: var(--hardware-key-surface);
-  border-color: var(--hardware-key-border);
-  box-shadow: none;
-}
-
 .lcd-module {
   min-width: 0;
+  align-self: start;
+  margin-top: calc(
+    clamp(0.82rem, 2.45vw, 1.6rem)
+    + 8px
+    + clamp(28px, 4.25vw, 44px)
+    - clamp(36px, 5vw, 54px)
+    - clamp(7px, 1.2vw, 12px)
+  );
   padding: clamp(7px, 1.2vw, 12px);
   border-radius: 7px;
   background: linear-gradient(#24282c, #090b0c);
@@ -1150,32 +1129,21 @@ kbd {
     height: calc(100% - 8px);
   }
 
-  .key-hint {
-    width: 19px;
-    height: 19px;
-    border-radius: 5px;
-    font-size: 0.58rem;
-  }
-
-  .answer-button-row > .key-hint {
-    right: -11px;
-    left: auto;
-  }
-
-  .control-shortcut-row > kbd {
-    right: -5px;
-    left: auto;
-  }
-
   .control-panel {
     grid-template-columns: minmax(58px, 0.7fr) minmax(160px, 2.5fr) minmax(94px, 1fr);
     gap: 8px;
-    padding: 11px 7px;
+    padding: 11px clamp(8px, 2.5vw, 16px);
   }
 
   .lcd-module {
     width: calc(100% - 24px);
     justify-self: center;
+    margin-top: calc(
+      clamp(0.82rem, 2.45vw, 1.6rem)
+      + 8px
+      + clamp(28px, 4.25vw, 44px)
+      - 36px
+    );
     padding: 5px;
   }
 
@@ -1281,6 +1249,21 @@ kbd {
 
   .control-panel {
     grid-template-columns: 54px minmax(145px, 1fr) 80px;
+    padding-inline: clamp(8px, 3vw, 12px);
+  }
+
+  .lcd-module {
+    width: min(100%, clamp(100px, 38vw, 160px));
+    margin-top: calc(clamp(0.7rem, 3.25vw, 0.92rem) + 7px);
+    padding: 3px;
+  }
+
+  .lcd-screen {
+    min-height: 52px;
+    padding: 5px 4px;
+    border-width: 2px;
+    font-size: clamp(0.5rem, 2.3vw, 0.7rem);
+    letter-spacing: 0.015em;
   }
 
   .control-label,
@@ -1296,26 +1279,12 @@ kbd {
 
 @media (max-width: 405px) {
   .control-panel {
-    grid-template-areas:
-      "lcd lcd"
-      "reset mode";
-    grid-template-columns: minmax(64px, 0.8fr) minmax(120px, 1.2fr);
-  }
-
-  .reset-control {
-    grid-area: reset;
-  }
-
-  .lcd-module {
-    grid-area: lcd;
-  }
-
-  .mode-control {
-    grid-area: mode;
+    grid-template-columns: 46px minmax(0, 1fr) 64px;
+    gap: 4px;
   }
 
   .mode-scale {
-    font-size: 0.52rem;
+    font-size: 0.4rem;
   }
 }
 

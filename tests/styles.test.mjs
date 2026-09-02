@@ -78,21 +78,38 @@ test("hardware labels and answer options reproduce the printed reference styling
   assert.match(getRule(".answer-card h2"), /text-shadow:\s*var\(--option-label-text-shadow\)/);
 });
 
-test("keyboard shortcuts do not shift their centred controls", () => {
+test("hardware controls do not render keyboard shortcut badges", () => {
+  const answerControls = page.match(/<section class="answers"[\s\S]*?<\/section>/)?.[0];
+  const scoreboardControls = page.match(/<section class="control-panel[\s\S]*?<\/section>/)?.[0];
+
+  assert.ok(answerControls);
+  assert.ok(scoreboardControls);
   assert.equal(page.match(/class="answer-button-row"/g)?.length, 3);
-  assert.equal(page.match(/class="control-shortcut-row"/g)?.length, 2);
-  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /display:\s*grid/);
-  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /width:\s*fit-content/);
-  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /justify-self:\s*center/);
-  assert.match(getRule(".answer-button-row > .key-hint,\n.control-shortcut-row > kbd"), /position:\s*absolute/);
-  assert.match(getRule(".answer-button-row > .key-hint,\n.control-shortcut-row > kbd"), /left:\s*calc\(100% \+ clamp\(5px,\s*1vw,\s*12px\)\)/);
-  assert.match(stylesheet, /@media \(max-width:\s*720px\)[\s\S]*?\.answer-button-row > \.key-hint\s*{[^}]*right:\s*-11px;[^}]*left:\s*auto/);
-  assert.match(stylesheet, /@media \(max-width:\s*720px\)[\s\S]*?\.control-shortcut-row > kbd\s*{[^}]*right:\s*-5px;[^}]*left:\s*auto/);
+  assert.equal(page.match(/class="control-button-row"/g)?.length, 2);
+  assert.match(getRule(".answer-button-row,\n.control-button-row"), /display:\s*grid/);
+  assert.match(getRule(".answer-button-row,\n.control-button-row"), /width:\s*fit-content/);
+  assert.match(getRule(".answer-button-row,\n.control-button-row"), /justify-self:\s*center/);
+  assert.doesNotMatch(answerControls, /<kbd/);
+  assert.doesNotMatch(scoreboardControls, /<kbd/);
+  assert.doesNotMatch(page, /class="key-hint"/);
+  assert.doesNotMatch(page, /class="control-shortcut-row"/);
+  assert.doesNotMatch(stylesheet, /\.key-hint|\.control-shortcut-row/);
+  assert.doesNotMatch(stylesheet, /--hardware-key-/);
+  assert.match(application, /\["1",\s*"2",\s*"3"\]\.includes\(event\.key\)/);
+  assert.match(application, /event\.key\.toLowerCase\(\) === "r"/);
+  assert.match(application, /event\.key\.toLowerCase\(\) === "m"/);
 });
 
-test("the mobile LCD leaves room for centred controls and their shortcuts", () => {
+test("the mobile controls keep the standard single-row layout", () => {
   assert.match(stylesheet, /@media \(max-width:\s*720px\)[\s\S]*?\.lcd-module\s*{[^}]*width:\s*calc\(100% - 24px\);[^}]*justify-self:\s*center/);
-  assert.match(stylesheet, /@media \(max-width:\s*405px\)[\s\S]*?\.control-panel\s*{[^}]*grid-template-areas:\s*"lcd lcd"\s*"reset mode"/);
+  assert.match(getRule(".reset-control,\n.mode-control"), /align-self:\s*start/);
+  assert.match(getRule(".reset-control .control-button-row"), /margin-top:\s*calc\(clamp\(28px,\s*4\.25vw,\s*44px\)\s*-\s*clamp\(21px,\s*3\.5vw,\s*33px\)\)/);
+  assert.match(getRule(".lcd-module"), /align-self:\s*start/);
+  assert.match(getRule(".lcd-module"), /margin-top:\s*calc\([\s\S]*clamp\(0\.82rem,\s*2\.45vw,\s*1\.6rem\)[\s\S]*clamp\(28px,\s*4\.25vw,\s*44px\)[\s\S]*clamp\(36px,\s*5vw,\s*54px\)/);
+  assert.match(stylesheet, /@media \(max-width:\s*430px\)[\s\S]*?\.lcd-module\s*{[^}]*width:\s*min\(100%,\s*clamp\(100px,\s*38vw,\s*160px\)\);[^}]*margin-top:\s*calc\(clamp\(0\.7rem,\s*3\.25vw,\s*0\.92rem\) \+ 7px\);[^}]*padding:\s*3px/);
+  assert.match(stylesheet, /@media \(max-width:\s*430px\)[\s\S]*?\.control-panel\s*{[^}]*padding-inline:\s*clamp\(8px,\s*3vw,\s*12px\)/);
+  assert.match(stylesheet, /@media \(max-width:\s*405px\)[\s\S]*?\.control-panel\s*{[^}]*grid-template-columns:\s*46px\s+minmax\(0,\s*1fr\)\s+64px/);
+  assert.doesNotMatch(stylesheet, /grid-template-areas:\s*"lcd lcd"\s*"reset mode"/);
   assert.match(getRule("html"), /min-width:\s*280px/);
   assert.match(stylesheet, /@media \(max-width:\s*300px\)[\s\S]*?\.feedback-panel\s*{[^}]*grid-template-columns:\s*minmax\(68px,\s*1fr\)\s*minmax\(70px,\s*1fr\)\s*minmax\(68px,\s*1fr\)/);
 });
@@ -105,7 +122,7 @@ test("correct and incorrect indicators use separate labelled plates", () => {
 
 test("the page requests the current tab-free stylesheet and iPhone feedback script", () => {
   assert.match(page, /rel="icon" href="\.\/favicon\.svg\?v=20260902"/);
-  assert.match(page, /href="\.\/styles\.css\?v=20260902-contained-shortcuts"/);
+  assert.match(page, /href="\.\/styles\.css\?v=20260902-mobile-clean-controls"/);
   assert.match(page, /src="\.\/js\/app\.js\?v=20260902-iphone-feedback"/);
   assert.match(application, /from "\.\/buzzer\.js\?v=20260902-iphone-feedback"/);
   assert.match(application, /from "\.\/game-engine\.js\?v=20260902-mode-shortcut"/);

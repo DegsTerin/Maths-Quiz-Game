@@ -62,6 +62,7 @@ test("correct and incorrect indicators use separate labelled plates", () => {
 });
 
 test("the page requests the current reference-label stylesheet and shortcut script", () => {
+  assert.match(page, /rel="icon" href="\.\/favicon\.svg\?v=20260902"/);
   assert.match(page, /href="\.\/styles\.css\?v=20260902-reference-labels"/);
   assert.match(page, /src="\.\/js\/app\.js\?v=20260902-mode-shortcut"/);
   assert.match(application, /from "\.\/game-engine\.js\?v=20260902-mode-shortcut"/);

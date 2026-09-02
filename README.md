@@ -33,7 +33,7 @@ The browser engine reproduces the PT-BR decimal Arduino variant. The interface i
 - British English and Brazilian Portuguese interfaces
 - Persistent theme and language preferences
 - Keyboard controls and accessible labels, status announcements and live regions
-- Two-pulse buzzer sound after an incorrect answer, generated with the Web Audio API
+- Arduino-style two-pulse buzzer after an incorrect answer, with iPhone audio-session recovery and vibration on supported devices
 - No runtime dependencies and no build step
 
 ### Arduino edition
@@ -58,7 +58,7 @@ The published game opens in dark mode and British English on a first visit. Them
 | Theme controls | Switch between dark and light modes |
 | Language controls | Switch between en-GB and pt-BR |
 
-An incorrect answer keeps the same problem available for another attempt and sounds the browser buzzer when audio is permitted by the browser. A correct answer advances to a new round after the display feedback animation.
+An incorrect answer keeps the same problem available for another attempt, sounds the browser buzzer and requests a short vibration pattern. Safari on iPhone plays the buzzer but does not currently expose the Vibration API, so haptic feedback is available only on compatible browsers and devices. A correct answer advances to a new round after the display feedback animation.
 
 ### Run locally
 

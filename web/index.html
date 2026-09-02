@@ -25,7 +25,7 @@
         // The default dark theme remains active when storage is unavailable.
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260902-no-case-tabs">
+    <link rel="stylesheet" href="./styles.css?v=20260902-spaced-shortcuts">
   </head>
   <body>
     <div class="ambient-light" aria-hidden="true"></div>
@@ -122,12 +122,14 @@
                 data-value=""
                 aria-label="Option 1"
               ></div>
-              <button class="arcade-button" type="button" data-answer="0" aria-label="Choose option 1">
-                <span class="arcade-button__rim" aria-hidden="true">
-                  <span class="arcade-button__cap"></span>
-                </span>
-                <span class="key-hint" aria-hidden="true">1</span>
-              </button>
+              <div class="answer-button-row">
+                <button class="arcade-button" type="button" data-answer="0" aria-label="Choose option 1">
+                  <span class="arcade-button__rim" aria-hidden="true">
+                    <span class="arcade-button__cap"></span>
+                  </span>
+                </button>
+                <kbd class="key-hint" aria-hidden="true">1</kbd>
+              </div>
             </article>
 
             <article class="answer-card answer-card--blue" data-answer-card="1">
@@ -138,12 +140,14 @@
                 data-value=""
                 aria-label="Option 2"
               ></div>
-              <button class="arcade-button" type="button" data-answer="1" aria-label="Choose option 2">
-                <span class="arcade-button__rim" aria-hidden="true">
-                  <span class="arcade-button__cap"></span>
-                </span>
-                <span class="key-hint" aria-hidden="true">2</span>
-              </button>
+              <div class="answer-button-row">
+                <button class="arcade-button" type="button" data-answer="1" aria-label="Choose option 2">
+                  <span class="arcade-button__rim" aria-hidden="true">
+                    <span class="arcade-button__cap"></span>
+                  </span>
+                </button>
+                <kbd class="key-hint" aria-hidden="true">2</kbd>
+              </div>
             </article>
 
             <article class="answer-card answer-card--orange" data-answer-card="2">
@@ -154,22 +158,26 @@
                 data-value=""
                 aria-label="Option 3"
               ></div>
-              <button class="arcade-button" type="button" data-answer="2" aria-label="Choose option 3">
-                <span class="arcade-button__rim" aria-hidden="true">
-                  <span class="arcade-button__cap"></span>
-                </span>
-                <span class="key-hint" aria-hidden="true">3</span>
-              </button>
+              <div class="answer-button-row">
+                <button class="arcade-button" type="button" data-answer="2" aria-label="Choose option 3">
+                  <span class="arcade-button__rim" aria-hidden="true">
+                    <span class="arcade-button__cap"></span>
+                  </span>
+                </button>
+                <kbd class="key-hint" aria-hidden="true">3</kbd>
+              </div>
             </article>
           </section>
 
           <section class="control-panel hardware-panel" aria-label="Controls and scoreboard" data-i18n-aria-label="controlsLabel">
             <div class="reset-control">
               <span class="control-label hardware-title" data-i18n="reset">Reset</span>
-              <button class="reset-button" id="reset-button" type="button" aria-label="Reset the score" data-i18n-aria-label="resetScore">
-                <span aria-hidden="true"></span>
-              </button>
-              <kbd>R</kbd>
+              <div class="control-shortcut-row">
+                <button class="reset-button" id="reset-button" type="button" aria-label="Reset the score" data-i18n-aria-label="resetScore">
+                  <span aria-hidden="true"></span>
+                </button>
+                <kbd>R</kbd>
+              </div>
             </div>
 
             <div class="lcd-module" aria-label="Score display" aria-live="polite" data-i18n-aria-label="scoreDisplayLabel">
@@ -181,8 +189,11 @@
 
             <div class="mode-control">
               <label class="hardware-title" for="difficulty-control" data-i18n="modeLabel">Mode</label>
-              <div class="rotary-control" aria-hidden="true">
-                <span class="rotary-control__pointer"></span>
+              <div class="control-shortcut-row">
+                <div class="rotary-control" aria-hidden="true">
+                  <span class="rotary-control__pointer"></span>
+                </div>
+                <kbd>M</kbd>
               </div>
               <input
                 id="difficulty-control"
@@ -196,7 +207,6 @@
               <div class="mode-scale" aria-hidden="true">
                 <span data-i18n="difficultyEasy">Easy</span><span data-i18n="difficultyMedium">Medium</span><span data-i18n="difficultyHard">Hard</span>
               </div>
-              <kbd>M</kbd>
             </div>
           </section>
 
@@ -236,6 +246,6 @@
     </div>
 
     <p class="visually-hidden" id="live-region" aria-live="assertive"></p>
-    <script type="module" src="./js/app.js?v=20260902-mode-shortcut"></script>
+    <script type="module" src="./js/app.js?v=20260902-iphone-feedback"></script>
   </body>
 </html>

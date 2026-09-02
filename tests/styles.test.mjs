@@ -78,16 +78,26 @@ test("hardware labels and answer options reproduce the printed reference styling
   assert.match(getRule(".answer-card h2"), /text-shadow:\s*var\(--option-label-text-shadow\)/);
 });
 
+test("keyboard shortcuts sit by the lower-right corner of their controls", () => {
+  assert.equal(page.match(/class="answer-button-row"/g)?.length, 3);
+  assert.equal(page.match(/class="control-shortcut-row"/g)?.length, 2);
+  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /display:\s*flex/);
+  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /align-items:\s*flex-end/);
+  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /gap:\s*clamp\(5px,\s*1vw,\s*12px\)/);
+  assert.doesNotMatch(getRule(".key-hint"), /position:\s*absolute/);
+});
+
 test("correct and incorrect indicators use separate labelled plates", () => {
   assert.match(getRule(".feedback-lamp"), /display:\s*grid/);
   assert.match(getRule(".feedback-lamp"), /background:[\s\S]*var\(--feedback-plate\)/);
   assert.match(getRule(".feedback-lamp"), /box-shadow:[\s\S]*var\(--feedback-plate-shadow\)/);
 });
 
-test("the page requests the current tab-free stylesheet and shortcut script", () => {
+test("the page requests the current tab-free stylesheet and iPhone feedback script", () => {
   assert.match(page, /rel="icon" href="\.\/favicon\.svg\?v=20260902"/);
-  assert.match(page, /href="\.\/styles\.css\?v=20260902-no-case-tabs"/);
-  assert.match(page, /src="\.\/js\/app\.js\?v=20260902-mode-shortcut"/);
+  assert.match(page, /href="\.\/styles\.css\?v=20260902-spaced-shortcuts"/);
+  assert.match(page, /src="\.\/js\/app\.js\?v=20260902-iphone-feedback"/);
+  assert.match(application, /from "\.\/buzzer\.js\?v=20260902-iphone-feedback"/);
   assert.match(application, /from "\.\/game-engine\.js\?v=20260902-mode-shortcut"/);
   assert.match(application, /from "\.\/i18n\.js\?v=20260902-mode-shortcut"/);
 });

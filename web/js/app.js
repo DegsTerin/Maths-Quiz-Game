@@ -1,4 +1,4 @@
-import { scheduleWrongAnswerBuzzer } from "./buzzer.js?v=20260902-mode-shortcut";
+import { createWrongAnswerFeedback } from "./buzzer.js?v=20260902-iphone-feedback";
 import {
   Difficulty,
   getNextDifficulty,
@@ -159,10 +159,13 @@ const SEGMENT_POINTS = Object.freeze({
 });
 
 let activityToken = 0;
-let audioContext = null;
 let currentLocale = DEFAULT_LOCALE;
 let displayedMatrixOperation = Operation.NONE;
 const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
+const wrongAnswerFeedback = createWrongAnswerFeedback({
+  globalObject: window,
+  navigatorObject: navigator,
+});
 
 function t(key, variables = {}) {
   return translate(currentLocale, key, variables);
@@ -508,20 +511,9 @@ function startFreshRound({ resetScores = false } = {}) {
   prepareSelection(animationSteps, token);
 }
 
-async function playWrongFeedback() {
-  try {
-    audioContext ??= new AudioContext();
-    if (audioContext.state === "suspended") await audioContext.resume();
-
-    scheduleWrongAnswerBuzzer(audioContext);
-  } catch {
-    // Audio feedback is optional, matching the optional active buzzer module.
-  }
-}
-
 async function showIncorrectFeedback(answerIndex, token) {
   elements.answerCards[answerIndex].classList.add("is-wrong");
-  void playWrongFeedback();
+  void wrongAnswerFeedback.play();
   announce(t("answerWrongAnnouncement"));
 
   if (!(await wait(1000, token))) return;
@@ -562,6 +554,7 @@ function handleAnswer(answerIndex) {
   const outcome = engine.submitAnswer(answerIndex);
   if (!outcome.accepted) return;
 
+  void wrongAnswerFeedback.unlock();
   const token = activityToken;
   renderState();
   if (outcome.correct) {
@@ -610,6 +603,12 @@ elements.localeButtons.forEach((button) => {
     applyLocale(button.dataset.localeChoice, { persist: true, announceChange: true });
   });
 });
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) wrongAnswerFeedback.release();
+});
+
+window.addEventListener("pagehide", () => wrongAnswerFeedback.release());
 
 document.addEventListener("keydown", (event) => {
   if (event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;

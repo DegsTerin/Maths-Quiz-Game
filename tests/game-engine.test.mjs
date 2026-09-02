@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   Difficulty,
+  getNextDifficulty,
   MathsQuizEngine,
   Operation,
   Status,
@@ -31,6 +32,13 @@ function assertDisplayable(engine, value, decimalPlaces = -1) {
   assert.notEqual(formatted, "");
   assert.ok(formatted.replace(".", "").length <= 4, `${formatted} exceeds four digits`);
 }
+
+test("the mode shortcut cycles easy, medium, hard, then easy", () => {
+  assert.equal(getNextDifficulty(Difficulty.EASY), Difficulty.MEDIUM);
+  assert.equal(getNextDifficulty(Difficulty.MEDIUM), Difficulty.HARD);
+  assert.equal(getNextDifficulty(Difficulty.HARD), Difficulty.EASY);
+  assert.equal(getNextDifficulty("invalid"), Difficulty.EASY);
+});
 
 test("operation selection uses the Arduino thresholds for each level", () => {
   const cases = [

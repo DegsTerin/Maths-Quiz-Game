@@ -4,6 +4,7 @@ import test from "node:test";
 
 const stylesheet = await readFile(new URL("../web/styles.css", import.meta.url), "utf8");
 const page = await readFile(new URL("../web/index.html", import.meta.url), "utf8");
+const application = await readFile(new URL("../web/js/app.js", import.meta.url), "utf8");
 
 function getRule(selector) {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -47,6 +48,22 @@ test("the display housing matches the SVG view box", () => {
   assert.match(getRule(".matrix-frame"), /width:\s*min\(100%,\s*220px\)/);
 });
 
-test("the page requests the current hardware theme stylesheet", () => {
-  assert.match(page, /href="\.\/styles\.css\?v=20260902-dark-hardware"/);
+test("hardware labels and answer options reproduce the printed reference styling", () => {
+  assert.match(getRule(".hardware-title"), /font-weight:\s*900/);
+  assert.match(getRule(".hardware-title"), /text-shadow:\s*var\(--hardware-text-shadow\)/);
+  assert.match(getRule(".answer-card h2"), /background:\s*var\(--option-label-surface\)/);
+  assert.match(getRule(".answer-card h2"), /box-shadow:\s*var\(--option-label-shadow\)/);
+});
+
+test("correct and incorrect indicators use separate labelled plates", () => {
+  assert.match(getRule(".feedback-lamp"), /display:\s*grid/);
+  assert.match(getRule(".feedback-lamp"), /background:[\s\S]*var\(--feedback-plate\)/);
+  assert.match(getRule(".feedback-lamp"), /box-shadow:[\s\S]*var\(--feedback-plate-shadow\)/);
+});
+
+test("the page requests the current reference-label stylesheet and shortcut script", () => {
+  assert.match(page, /href="\.\/styles\.css\?v=20260902-reference-labels"/);
+  assert.match(page, /src="\.\/js\/app\.js\?v=20260902-mode-shortcut"/);
+  assert.match(application, /from "\.\/game-engine\.js\?v=20260902-mode-shortcut"/);
+  assert.match(application, /from "\.\/i18n\.js\?v=20260902-mode-shortcut"/);
 });

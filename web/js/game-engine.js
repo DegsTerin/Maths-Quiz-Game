@@ -4,6 +4,13 @@ export const Difficulty = Object.freeze({
   HARD: 3,
 });
 
+export function getNextDifficulty(difficulty) {
+  const value = Number(difficulty);
+  if (value === Difficulty.EASY) return Difficulty.MEDIUM;
+  if (value === Difficulty.MEDIUM) return Difficulty.HARD;
+  return Difficulty.EASY;
+}
+
 export const Operation = Object.freeze({
   NONE: "none",
   ADD: "add",

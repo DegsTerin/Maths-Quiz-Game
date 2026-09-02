@@ -14,6 +14,8 @@ test("the interface defaults to British English and also exposes Brazilian Portu
   assert.equal(translate("en-GB", "heading"), "Maths Quiz Game");
   assert.equal(translate("pt-BR", "themeLight"), "Claro");
   assert.equal(translate("en-GB", "themeLight"), "Light");
+  assert.equal(translate("pt-BR", "instructionModeShortcutPrefix"), "Pressione");
+  assert.equal(translate("en-GB", "instructionModeShortcutSuffix"), "to cycle the difficulty.");
 });
 
 test("translations interpolate accessible values and fall back to British English", () => {

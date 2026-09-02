@@ -54,7 +54,7 @@ The published game opens in dark mode and British English on a first visit. Them
 | --- | --- |
 | Answer buttons or <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd> | Select an answer |
 | Red reset button or <kbd>R</kbd> | Reset the score and start a new round |
-| Mode slider or left/right arrow keys | Select the difficulty for the next round |
+| Mode slider, <kbd>M</kbd> or left/right arrow keys | Select the difficulty for the next round |
 | Theme controls | Switch between dark and light modes |
 | Language controls | Switch between en-GB and pt-BR |
 

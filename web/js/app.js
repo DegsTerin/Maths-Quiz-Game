@@ -1,8 +1,21 @@
-import { Difficulty, MathsQuizEngine, Operation, Status } from "./game-engine.js";
-import { scheduleWrongAnswerBuzzer } from "./buzzer.js";
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES, translate } from "./i18n.js";
-import { readStoredPreference, storePreference } from "./preferences.js";
-import { parseDisplayCharacters } from "./segment-display.js";
+import { scheduleWrongAnswerBuzzer } from "./buzzer.js?v=20260902-mode-shortcut";
+import {
+  Difficulty,
+  getNextDifficulty,
+  MathsQuizEngine,
+  Operation,
+  Status,
+} from "./game-engine.js?v=20260902-mode-shortcut";
+import {
+  DEFAULT_LOCALE,
+  SUPPORTED_LOCALES,
+  translate,
+} from "./i18n.js?v=20260902-mode-shortcut";
+import {
+  readStoredPreference,
+  storePreference,
+} from "./preferences.js?v=20260902-mode-shortcut";
+import { parseDisplayCharacters } from "./segment-display.js?v=20260902-mode-shortcut";
 
 const engine = new MathsQuizEngine();
 
@@ -601,8 +614,10 @@ elements.localeButtons.forEach((button) => {
 document.addEventListener("keydown", (event) => {
   if (event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
 
-  const targetIsControl = event.target instanceof HTMLInputElement ||
-    event.target instanceof HTMLButtonElement;
+  const targetIsControl = event.target instanceof HTMLElement &&
+    event.target.matches(
+      'input, button, select, textarea, a[href], [contenteditable]:not([contenteditable="false"])',
+    );
 
   if (!targetIsControl && ["1", "2", "3"].includes(event.key)) {
     event.preventDefault();
@@ -613,6 +628,12 @@ document.addEventListener("keydown", (event) => {
   if (!targetIsControl && event.key.toLowerCase() === "r") {
     event.preventDefault();
     elements.resetButton.click();
+    return;
+  }
+
+  if (!targetIsControl && event.key.toLowerCase() === "m") {
+    event.preventDefault();
+    changeDifficulty(getNextDifficulty(engine.pendingDifficulty));
     return;
   }
 

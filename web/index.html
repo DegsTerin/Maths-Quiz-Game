@@ -24,7 +24,7 @@
         // The default dark theme remains active when storage is unavailable.
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260902-dark-hardware">
+    <link rel="stylesheet" href="./styles.css?v=20260902-reference-labels">
   </head>
   <body>
     <div class="ambient-light" aria-hidden="true"></div>
@@ -90,7 +90,7 @@
 
           <section class="problem-panel hardware-panel" aria-label="Current problem" data-i18n-aria-label="currentProblemLabel">
             <div class="operand-unit">
-              <h2 data-i18n="numberOne">Number 1</h2>
+              <h2 class="hardware-title" data-i18n="numberOne">Number 1</h2>
               <div
                 class="segment-display segment-display--operand"
                 id="operand-one"
@@ -100,14 +100,14 @@
             </div>
 
             <div class="operation-unit">
-              <h2 data-i18n="operationHeading">Operation</h2>
+              <h2 class="hardware-title" data-i18n="operationHeading">Operation</h2>
               <div class="matrix-frame" aria-label="Operation matrix off" id="operation-matrix">
                 <div class="led-matrix" aria-hidden="true"></div>
               </div>
             </div>
 
             <div class="operand-unit">
-              <h2 data-i18n="numberTwo">Number 2</h2>
+              <h2 class="hardware-title" data-i18n="numberTwo">Number 2</h2>
               <div
                 class="segment-display segment-display--operand"
                 id="operand-two"
@@ -117,11 +117,11 @@
             </div>
           </section>
 
-          <p class="machine-question" data-i18n="question">Which option is correct?</p>
+          <p class="machine-question hardware-title" data-i18n="question">Which option is correct?</p>
 
           <section class="answers" aria-label="Answer options" data-i18n-aria-label="answersLabel">
             <article class="answer-card answer-card--green" data-answer-card="0">
-              <h2 data-i18n="optionOne">Option 1</h2>
+              <h2 class="option-title" data-i18n="optionOne">Option 1</h2>
               <div
                 class="segment-display"
                 id="answer-one"
@@ -137,7 +137,7 @@
             </article>
 
             <article class="answer-card answer-card--blue" data-answer-card="1">
-              <h2 data-i18n="optionTwo">Option 2</h2>
+              <h2 class="option-title" data-i18n="optionTwo">Option 2</h2>
               <div
                 class="segment-display"
                 id="answer-two"
@@ -153,7 +153,7 @@
             </article>
 
             <article class="answer-card answer-card--orange" data-answer-card="2">
-              <h2 data-i18n="optionThree">Option 3</h2>
+              <h2 class="option-title" data-i18n="optionThree">Option 3</h2>
               <div
                 class="segment-display"
                 id="answer-three"
@@ -171,7 +171,7 @@
 
           <section class="control-panel hardware-panel" aria-label="Controls and scoreboard" data-i18n-aria-label="controlsLabel">
             <div class="reset-control">
-              <span class="control-label" data-i18n="reset">Reset</span>
+              <span class="control-label hardware-title" data-i18n="reset">Reset</span>
               <button class="reset-button" id="reset-button" type="button" aria-label="Reset the score" data-i18n-aria-label="resetScore">
                 <span aria-hidden="true"></span>
               </button>
@@ -186,7 +186,7 @@
             </div>
 
             <div class="mode-control">
-              <label for="difficulty-control" data-i18n="modeLabel">Mode</label>
+              <label class="hardware-title" for="difficulty-control" data-i18n="modeLabel">Mode</label>
               <div class="rotary-control" aria-hidden="true">
                 <span class="rotary-control__pointer"></span>
               </div>
@@ -202,6 +202,7 @@
               <div class="mode-scale" aria-hidden="true">
                 <span data-i18n="difficultyEasy">Easy</span><span data-i18n="difficultyMedium">Medium</span><span data-i18n="difficultyHard">Hard</span>
               </div>
+              <kbd>M</kbd>
             </div>
           </section>
 
@@ -221,7 +222,7 @@
         <aside class="instructions" aria-label="How to play" data-i18n-aria-label="instructionsLabel">
           <div>
             <span class="instruction-number">01</span>
-            <p><span data-i18n="instructionDifficultyPrefix">Choose the difficulty with the</span> <strong data-i18n="modeLabel">Mode</strong><span data-i18n="instructionDifficultySuffix"> control.</span></p>
+            <p><span data-i18n="instructionDifficultyPrefix">Choose the difficulty with the</span> <strong data-i18n="modeLabel">Mode</strong><span data-i18n="instructionDifficultySuffix"> control.</span> <span data-i18n="instructionModeShortcutPrefix">Press</span> <kbd>M</kbd> <span data-i18n="instructionModeShortcutSuffix">to cycle the difficulty.</span></p>
           </div>
           <div>
             <span class="instruction-number">02</span>
@@ -241,6 +242,6 @@
     </div>
 
     <p class="visually-hidden" id="live-region" aria-live="assertive"></p>
-    <script type="module" src="./js/app.js"></script>
+    <script type="module" src="./js/app.js?v=20260902-mode-shortcut"></script>
   </body>
 </html>

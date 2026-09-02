@@ -78,13 +78,19 @@ test("hardware labels and answer options reproduce the printed reference styling
   assert.match(getRule(".answer-card h2"), /text-shadow:\s*var\(--option-label-text-shadow\)/);
 });
 
-test("keyboard shortcuts sit by the lower-right corner of their controls", () => {
+test("keyboard shortcuts do not shift their centred controls", () => {
   assert.equal(page.match(/class="answer-button-row"/g)?.length, 3);
   assert.equal(page.match(/class="control-shortcut-row"/g)?.length, 2);
-  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /display:\s*flex/);
-  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /align-items:\s*flex-end/);
-  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /gap:\s*clamp\(5px,\s*1vw,\s*12px\)/);
-  assert.doesNotMatch(getRule(".key-hint"), /position:\s*absolute/);
+  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /display:\s*grid/);
+  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /width:\s*fit-content/);
+  assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /justify-self:\s*center/);
+  assert.match(getRule(".answer-button-row > .key-hint,\n.control-shortcut-row > kbd"), /position:\s*absolute/);
+  assert.match(getRule(".answer-button-row > .key-hint,\n.control-shortcut-row > kbd"), /left:\s*calc\(100% \+ clamp\(5px,\s*1vw,\s*12px\)\)/);
+  assert.match(stylesheet, /@media \(max-width:\s*370px\)[\s\S]*?\.answer-button-row > \.key-hint\s*{[\s\S]*?left:\s*calc\(100% \+ 1px\)/);
+});
+
+test("the mobile LCD leaves room for centred controls and their shortcuts", () => {
+  assert.match(stylesheet, /@media \(max-width:\s*430px\)[\s\S]*?\.lcd-module\s*{[^}]*width:\s*calc\(100% - 24px\);[^}]*justify-self:\s*center/);
 });
 
 test("correct and incorrect indicators use separate labelled plates", () => {
@@ -95,7 +101,7 @@ test("correct and incorrect indicators use separate labelled plates", () => {
 
 test("the page requests the current tab-free stylesheet and iPhone feedback script", () => {
   assert.match(page, /rel="icon" href="\.\/favicon\.svg\?v=20260902"/);
-  assert.match(page, /href="\.\/styles\.css\?v=20260902-spaced-shortcuts"/);
+  assert.match(page, /href="\.\/styles\.css\?v=20260902-aligned-shortcuts"/);
   assert.match(page, /src="\.\/js\/app\.js\?v=20260902-iphone-feedback"/);
   assert.match(application, /from "\.\/buzzer\.js\?v=20260902-iphone-feedback"/);
   assert.match(application, /from "\.\/game-engine\.js\?v=20260902-mode-shortcut"/);

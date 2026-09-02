@@ -683,21 +683,28 @@ kbd {
 
 .answer-button-row,
 .control-shortcut-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: clamp(5px, 1vw, 12px);
+  position: relative;
+  display: grid;
+  width: fit-content;
+  place-items: center;
+  justify-self: center;
 }
 
 .answer-button-row {
-  width: 100%;
+  max-width: 100%;
   min-width: 0;
+}
+
+.answer-button-row > .key-hint,
+.control-shortcut-row > kbd {
+  position: absolute;
+  bottom: 0;
+  left: calc(100% + clamp(5px, 1vw, 12px));
 }
 
 .arcade-button {
   position: relative;
   display: grid;
-  flex: 0 1 auto;
   width: clamp(72px, 15vw, 178px);
   aspect-ratio: 1;
   place-items: center;
@@ -766,7 +773,6 @@ kbd {
 
 .key-hint {
   display: grid;
-  flex: 0 0 auto;
   width: 24px;
   height: 24px;
   place-items: center;
@@ -1265,6 +1271,11 @@ kbd {
     grid-template-columns: 54px minmax(145px, 1fr) 80px;
   }
 
+  .lcd-module {
+    width: calc(100% - 24px);
+    justify-self: center;
+  }
+
   .control-label,
   .mode-control label {
     font-size: clamp(0.7rem, 3.25vw, 0.92rem);
@@ -1273,6 +1284,12 @@ kbd {
   .feedback-panel > p {
     max-width: 124px;
     font-size: 0.62rem;
+  }
+}
+
+@media (max-width: 370px) {
+  .answer-button-row > .key-hint {
+    left: calc(100% + 1px);
   }
 }
 

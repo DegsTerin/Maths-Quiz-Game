@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const stylesheet = await readFile(new URL("../web/styles.css", import.meta.url), "utf8");
+const page = await readFile(new URL("../web/index.html", import.meta.url), "utf8");
 
 function getRule(selector) {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -44,4 +45,8 @@ test("the enclosure follows the physical front-panel proportions", () => {
 test("the display housing matches the SVG view box", () => {
   assert.match(getRule(".segment-display"), /aspect-ratio:\s*232\s*\/\s*96/);
   assert.match(getRule(".matrix-frame"), /width:\s*min\(100%,\s*220px\)/);
+});
+
+test("the page requests the current hardware theme stylesheet", () => {
+  assert.match(page, /href="\.\/styles\.css\?v=20260902-dark-hardware"/);
 });

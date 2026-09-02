@@ -78,6 +78,24 @@ test("hardware labels and answer options reproduce the printed reference styling
   assert.match(getRule(".answer-card h2"), /text-shadow:\s*var\(--option-label-text-shadow\)/);
 });
 
+test("correct and incorrect answers use distinct high-contrast outlines", () => {
+  const incorrectAnswer = getRule(".answer-card.is-wrong");
+  const correctAnswer = getRule(".answer-card.is-correct");
+
+  assert.match(incorrectAnswer, /animation:\s*wrong-shake 360ms ease/);
+  assert.match(incorrectAnswer, /box-shadow:[\s\S]*0 0 0 5px var\(--red\)[\s\S]*0 0 30px rgb\(230 61 53 \/ 72%\)/);
+  assert.doesNotMatch(incorrectAnswer, /filter:/);
+  assert.match(correctAnswer, /box-shadow:[\s\S]*0 0 0 5px #44d56b[\s\S]*0 0 30px rgb\(45 210 101 \/ 62%\)/);
+});
+
+test("correct-answer blinking hides only the illuminated number segments", () => {
+  const hiddenNumber = getRule(".segment-display.is-hidden .segment.is-on");
+
+  assert.match(hiddenNumber, /opacity:\s*0/);
+  assert.match(hiddenNumber, /filter:\s*none/);
+  assert.doesNotMatch(stylesheet, /\.segment-display\.is-hidden svg\s*\{/);
+});
+
 test("hardware controls do not render keyboard shortcut badges", () => {
   const answerControls = page.match(/<section class="answers"[\s\S]*?<\/section>/)?.[0];
   const scoreboardControls = page.match(/<section class="control-panel[\s\S]*?<\/section>/)?.[0];
@@ -121,9 +139,9 @@ test("correct and incorrect indicators use separate labelled plates", () => {
   assert.match(getRule(".feedback-lamp"), /box-shadow:[\s\S]*var\(--feedback-plate-shadow\)/);
 });
 
-test("the page requests the current tab-free stylesheet and iPhone feedback script", () => {
+test("the page requests the current feedback stylesheet and iPhone feedback script", () => {
   assert.match(page, /rel="icon" href="\.\/favicon\.svg\?v=20260902"/);
-  assert.match(page, /href="\.\/styles\.css\?v=20260902-larger-lcd-type"/);
+  assert.match(page, /href="\.\/styles\.css\?v=20260902-answer-feedback-states"/);
   assert.match(page, /src="\.\/js\/app\.js\?v=20260902-lcd-project-credit"/);
   assert.match(application, /from "\.\/buzzer\.js\?v=20260902-iphone-feedback"/);
   assert.match(application, /from "\.\/game-engine\.js\?v=20260902-mode-shortcut"/);

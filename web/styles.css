@@ -525,8 +525,9 @@ kbd {
   filter: drop-shadow(0 0 4px var(--segment-color));
 }
 
-.segment-display.is-hidden svg {
+.segment-display.is-hidden .segment.is-on {
   opacity: 0;
+  filter: none;
 }
 
 .segment-display--operand {
@@ -656,7 +657,11 @@ kbd {
 
 .answer-card.is-wrong {
   animation: wrong-shake 360ms ease;
-  filter: saturate(0.65) sepia(0.15);
+  box-shadow:
+    inset 0 0 0 5px rgb(255 255 255 / 28%),
+    0 0 0 5px var(--red),
+    0 0 30px rgb(230 61 53 / 72%),
+    0 7px 0 color-mix(in srgb, var(--card-deep) 82%, #252a2e);
 }
 
 .answer-card.is-correct {

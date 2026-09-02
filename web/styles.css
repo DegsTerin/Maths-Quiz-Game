@@ -41,10 +41,15 @@
   --hardware-shadow: rgb(0 0 0 / 28%);
   --hardware-label: #eef5f8;
   --hardware-muted: #a8b6c1;
-  --option-label-border: #7b878d;
-  --option-label-surface: #e0e4e2;
-  --option-label-text: #171b1e;
-  --option-label-shadow: inset 0 -2px 0 rgb(39 45 48 / 22%), 0 4px 8px rgb(0 0 0 / 28%);
+  --option-label-border: #607684;
+  --option-label-surface: #17232c;
+  --option-label-text: #f3f8fb;
+  --option-label-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    inset 0 -3px 0 rgb(0 0 0 / 36%),
+    0 4px 8px rgb(0 0 0 / 34%);
+  --option-label-radius: clamp(8px, 1.1vw, 12px);
+  --option-label-text-shadow: 0 2px 0 #05080a, 0 3px 6px rgb(0 0 0 / 46%);
   --hardware-text-shadow: 0 2px 0 #05080a, 0 5px 9px rgb(0 0 0 / 45%);
   --feedback-plate: #25313a;
   --feedback-plate-end: #151d24;
@@ -133,6 +138,8 @@ html[data-theme="light"] {
   --option-label-surface: #f3f1ea;
   --option-label-text: #282522;
   --option-label-shadow: inset 0 -2px 0 rgb(36 39 40 / 16%), 0 4px 7px rgb(0 0 0 / 18%);
+  --option-label-radius: 3px;
+  --option-label-text-shadow: 0 1px 0 rgb(255 255 255 / 72%), 0 2px 3px rgb(0 0 0 / 20%);
   --hardware-text-shadow: 0 1px 0 rgb(255 255 255 / 72%), 0 3px 5px rgb(0 0 0 / 24%);
   --feedback-plate: #efede6;
   --feedback-plate-end: #d9d5cb;
@@ -658,7 +665,7 @@ kbd {
   place-items: center;
   padding: clamp(5px, 0.8vw, 9px) 7px;
   border: 2px solid var(--option-label-border);
-  border-radius: 3px;
+  border-radius: var(--option-label-radius);
   color: var(--option-label-text);
   background: var(--option-label-surface);
   box-shadow: var(--option-label-shadow);
@@ -668,7 +675,7 @@ kbd {
   letter-spacing: -0.025em;
   line-height: 1.05;
   text-align: center;
-  text-shadow: 0 1px 0 rgb(255 255 255 / 42%), 0 2px 3px rgb(0 0 0 / 20%);
+  text-shadow: var(--option-label-text-shadow);
 }
 
 .answer-card--blue {

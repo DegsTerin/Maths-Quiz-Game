@@ -33,6 +33,18 @@ test("dark and light themes provide distinct hardware surfaces", () => {
 
   assert.equal(getCustomProperty(darkTheme, "hardware-label"), "#eef5f8");
   assert.equal(getCustomProperty(lightTheme, "hardware-label"), "#22282d");
+  assert.equal(getCustomProperty(darkTheme, "option-label-surface"), "#17232c");
+  assert.equal(getCustomProperty(darkTheme, "option-label-text"), "#f3f8fb");
+  assert.equal(getCustomProperty(lightTheme, "option-label-surface"), "#f3f1ea");
+  assert.equal(getCustomProperty(lightTheme, "option-label-text"), "#282522");
+  assert.notEqual(
+    getCustomProperty(darkTheme, "option-label-radius"),
+    getCustomProperty(lightTheme, "option-label-radius"),
+  );
+  assert.notEqual(
+    getCustomProperty(darkTheme, "option-label-text-shadow"),
+    getCustomProperty(lightTheme, "option-label-text-shadow"),
+  );
 });
 
 test("the enclosure follows the physical front-panel proportions", () => {
@@ -53,6 +65,8 @@ test("hardware labels and answer options reproduce the printed reference styling
   assert.match(getRule(".hardware-title"), /text-shadow:\s*var\(--hardware-text-shadow\)/);
   assert.match(getRule(".answer-card h2"), /background:\s*var\(--option-label-surface\)/);
   assert.match(getRule(".answer-card h2"), /box-shadow:\s*var\(--option-label-shadow\)/);
+  assert.match(getRule(".answer-card h2"), /border-radius:\s*var\(--option-label-radius\)/);
+  assert.match(getRule(".answer-card h2"), /text-shadow:\s*var\(--option-label-text-shadow\)/);
 });
 
 test("correct and incorrect indicators use separate labelled plates", () => {
@@ -61,9 +75,9 @@ test("correct and incorrect indicators use separate labelled plates", () => {
   assert.match(getRule(".feedback-lamp"), /box-shadow:[\s\S]*var\(--feedback-plate-shadow\)/);
 });
 
-test("the page requests the current reference-label stylesheet and shortcut script", () => {
+test("the page requests the current dark-option-label stylesheet and shortcut script", () => {
   assert.match(page, /rel="icon" href="\.\/favicon\.svg\?v=20260902"/);
-  assert.match(page, /href="\.\/styles\.css\?v=20260902-reference-labels"/);
+  assert.match(page, /href="\.\/styles\.css\?v=20260902-dark-option-labels"/);
   assert.match(page, /src="\.\/js\/app\.js\?v=20260902-mode-shortcut"/);
   assert.match(application, /from "\.\/game-engine\.js\?v=20260902-mode-shortcut"/);
   assert.match(application, /from "\.\/i18n\.js\?v=20260902-mode-shortcut"/);

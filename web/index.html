@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#121925" id="theme-colour">
+    <meta
+      name="description"
+      id="page-description"
+      content="Versão web interativa do Maths Quiz Game, fiel ao jogo de matemática com Arduino."
+    >
+    <title>Jogo de Matemática | Maths Quiz Game</title>
+    <script>
+      try {
+        const storedTheme = window.localStorage.getItem("mathsQuiz.theme");
+        if (["light", "dark"].includes(storedTheme)) {
+          document.documentElement.dataset.theme = storedTheme;
+          document.querySelector("#theme-colour").setAttribute(
+            "content",
+            storedTheme === "light" ? "#eef4f7" : "#121925",
+          );
+        }
+      } catch {
+        // The default dark theme remains active when storage is unavailable.
+      }
+    </script>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="ambient-light" aria-hidden="true"></div>
+
+    <div class="page-shell">
+      <nav class="preference-toolbar" aria-label="Preferências da página" data-i18n-aria-label="preferencesLabel">
+        <div class="preference-group" role="group" aria-label="Tema" data-i18n-aria-label="themeGroupLabel">
+          <span class="preference-label" data-i18n="themeLabel">Tema</span>
+          <button class="preference-button" type="button" data-theme-choice="light" aria-pressed="false" data-i18n="themeLight">
+            Claro
+          </button>
+          <button class="preference-button" type="button" data-theme-choice="dark" aria-pressed="true" data-i18n="themeDark">
+            Escuro
+          </button>
+        </div>
+        <div class="preference-group" role="group" aria-label="Idioma" data-i18n-aria-label="languageGroupLabel">
+          <span class="preference-label" data-i18n="languageLabel">Idioma</span>
+          <button
+            class="preference-button"
+            type="button"
+            data-locale-choice="pt-BR"
+            aria-label="Usar português do Brasil"
+            aria-pressed="true"
+            lang="pt-BR"
+            data-i18n-aria-label="languagePortuguese"
+          >
+            PT-BR
+          </button>
+          <button
+            class="preference-button"
+            type="button"
+            data-locale-choice="en-GB"
+            aria-label="Usar inglês britânico"
+            aria-pressed="false"
+            lang="en-GB"
+            data-i18n-aria-label="languageEnglish"
+          >
+            EN-GB
+          </button>
+        </div>
+      </nav>
+
+      <header class="page-header">
+        <p class="eyebrow" data-i18n="eyebrow">Maths Quiz Game · versão web</p>
+        <h1 data-i18n="heading">Jogo de Matemática</h1>
+        <p class="subtitle" data-i18n="subtitle">O painel Arduino original, agora jogável no navegador.</p>
+      </header>
+
+      <main>
+        <section class="machine" aria-label="Painel do jogo de matemática" data-i18n-aria-label="machineLabel">
+          <span class="case-tab case-tab--top-1" aria-hidden="true"></span>
+          <span class="case-tab case-tab--top-2" aria-hidden="true"></span>
+          <span class="case-tab case-tab--top-3" aria-hidden="true"></span>
+          <span class="case-tab case-tab--top-4" aria-hidden="true"></span>
+          <span class="case-tab case-tab--left-1" aria-hidden="true"></span>
+          <span class="case-tab case-tab--right-1" aria-hidden="true"></span>
+
+          <div class="machine__brand-row">
+            <span class="brand-mark">MQ</span>
+            <span data-i18n="arduinoProject">Projeto Arduino de DegsTerin</span>
+            <span class="power-indicator"><i></i> <span data-i18n="powerOn">ligado</span></span>
+          </div>
+
+          <section class="problem-panel hardware-panel" aria-label="Operação atual" data-i18n-aria-label="currentProblemLabel">
+            <div class="operand-unit">
+              <h2 data-i18n="numberOne">Número 1</h2>
+              <div
+                class="segment-display segment-display--operand"
+                id="operand-one"
+                data-value=""
+                aria-label="Primeiro número"
+              ></div>
+            </div>
+
+            <div class="operation-unit">
+              <h2 data-i18n="operationHeading">Operação</h2>
+              <div class="matrix-frame" aria-label="Operação sendo sorteada" id="operation-matrix">
+                <div class="led-matrix" aria-hidden="true"></div>
+              </div>
+            </div>
+
+            <div class="operand-unit">
+              <h2 data-i18n="numberTwo">Número 2</h2>
+              <div
+                class="segment-display segment-display--operand"
+                id="operand-two"
+                data-value=""
+                aria-label="Segundo número"
+              ></div>
+            </div>
+          </section>
+
+          <p class="machine-question" data-i18n="question">Qual a opção correta?</p>
+
+          <section class="answers" aria-label="Alternativas" data-i18n-aria-label="answersLabel">
+            <article class="answer-card answer-card--green" data-answer-card="0">
+              <h2 data-i18n="optionOne">Opção 1</h2>
+              <div
+                class="segment-display"
+                id="answer-one"
+                data-value=""
+                aria-label="Valor da opção 1"
+              ></div>
+              <button class="arcade-button" type="button" data-answer="0" aria-label="Escolher opção 1">
+                <span class="arcade-button__rim" aria-hidden="true">
+                  <span class="arcade-button__cap"></span>
+                </span>
+                <span class="key-hint" aria-hidden="true">1</span>
+              </button>
+            </article>
+
+            <article class="answer-card answer-card--blue" data-answer-card="1">
+              <h2 data-i18n="optionTwo">Opção 2</h2>
+              <div
+                class="segment-display"
+                id="answer-two"
+                data-value=""
+                aria-label="Valor da opção 2"
+              ></div>
+              <button class="arcade-button" type="button" data-answer="1" aria-label="Escolher opção 2">
+                <span class="arcade-button__rim" aria-hidden="true">
+                  <span class="arcade-button__cap"></span>
+                </span>
+                <span class="key-hint" aria-hidden="true">2</span>
+              </button>
+            </article>
+
+            <article class="answer-card answer-card--orange" data-answer-card="2">
+              <h2 data-i18n="optionThree">Opção 3</h2>
+              <div
+                class="segment-display"
+                id="answer-three"
+                data-value=""
+                aria-label="Valor da opção 3"
+              ></div>
+              <button class="arcade-button" type="button" data-answer="2" aria-label="Escolher opção 3">
+                <span class="arcade-button__rim" aria-hidden="true">
+                  <span class="arcade-button__cap"></span>
+                </span>
+                <span class="key-hint" aria-hidden="true">3</span>
+              </button>
+            </article>
+          </section>
+
+          <section class="control-panel hardware-panel" aria-label="Controles e placar" data-i18n-aria-label="controlsLabel">
+            <div class="reset-control">
+              <span class="control-label" data-i18n="reset">Zerar</span>
+              <button class="reset-button" id="reset-button" type="button" aria-label="Zerar o placar" data-i18n-aria-label="resetScore">
+                <span aria-hidden="true"></span>
+              </button>
+              <kbd>R</kbd>
+            </div>
+
+            <div class="lcd-module" aria-label="Visor de pontuação" aria-live="polite" data-i18n-aria-label="scoreDisplayLabel">
+              <div class="lcd-screen">
+                <span id="lcd-line-one">Modo: Facil</span>
+                <span id="lcd-line-two">Sorteando ...</span>
+              </div>
+            </div>
+
+            <div class="mode-control">
+              <label for="difficulty-control" data-i18n="modeLabel">Modo</label>
+              <div class="rotary-control" aria-hidden="true">
+                <span class="rotary-control__pointer"></span>
+              </div>
+              <input
+                id="difficulty-control"
+                type="range"
+                min="1"
+                max="3"
+                step="1"
+                value="1"
+                aria-valuetext="Fácil"
+              >
+              <div class="mode-scale" aria-hidden="true">
+                <span data-i18n="difficultyEasy">Fácil</span><span data-i18n="difficultyMedium">Médio</span><span data-i18n="difficultyHard">Difícil</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="feedback-panel" aria-label="Resultado da resposta" data-i18n-aria-label="answerResultLabel">
+            <div class="feedback-lamp feedback-lamp--correct">
+              <span class="lamp" id="correct-lamp" aria-hidden="true"></span>
+              <span data-i18n="correct">Certo</span>
+            </div>
+            <p id="round-status" data-i18n="statusSelecting">Sorteando a operação…</p>
+            <div class="feedback-lamp feedback-lamp--incorrect">
+              <span class="lamp" id="incorrect-lamp" aria-hidden="true"></span>
+              <span data-i18n="incorrect">Errado</span>
+            </div>
+          </section>
+        </section>
+
+        <aside class="instructions" aria-label="Como jogar" data-i18n-aria-label="instructionsLabel">
+          <div>
+            <span class="instruction-number">01</span>
+            <p><span data-i18n="instructionDifficultyPrefix">Escolha a dificuldade no controle de</span> <strong data-i18n="modeLabel">Modo</strong><span data-i18n="instructionDifficultySuffix">.</span></p>
+          </div>
+          <div>
+            <span class="instruction-number">02</span>
+            <p data-i18n="instructionSolve">Resolva a operação exibida no painel.</p>
+          </div>
+          <div>
+            <span class="instruction-number">03</span>
+            <p><span data-i18n="instructionAnswerPrefix">Pressione uma opção ou use as teclas</span> <kbd>1</kbd>, <kbd>2</kbd> <span data-i18n="instructionAnswerJoin">e</span> <kbd>3</kbd>.</p>
+          </div>
+        </aside>
+      </main>
+
+      <footer class="page-footer">
+        <span data-i18n="footerDescription">Reprodução fiel da variante Arduino PT-BR com números decimais.</span>
+        <a href="https://github.com/DegsTerin/Maths_Quiz_Game" data-i18n="githubLink">Ver projeto no GitHub</a>
+      </footer>
+    </div>
+
+    <p class="visually-hidden" id="live-region" aria-live="assertive"></p>
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>

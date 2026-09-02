@@ -188,7 +188,7 @@ html[data-theme="light"] {
 }
 
 html {
-  min-width: 320px;
+  min-width: 280px;
   background: var(--page-bg);
   scroll-behavior: smooth;
 }
@@ -1157,6 +1157,16 @@ kbd {
     font-size: 0.58rem;
   }
 
+  .answer-button-row > .key-hint {
+    right: -11px;
+    left: auto;
+  }
+
+  .control-shortcut-row > kbd {
+    right: -5px;
+    left: auto;
+  }
+
   .control-panel {
     grid-template-columns: minmax(58px, 0.7fr) minmax(160px, 2.5fr) minmax(94px, 1fr);
     gap: 8px;
@@ -1164,6 +1174,8 @@ kbd {
   }
 
   .lcd-module {
+    width: calc(100% - 24px);
+    justify-self: center;
     padding: 5px;
   }
 
@@ -1271,11 +1283,6 @@ kbd {
     grid-template-columns: 54px minmax(145px, 1fr) 80px;
   }
 
-  .lcd-module {
-    width: calc(100% - 24px);
-    justify-self: center;
-  }
-
   .control-label,
   .mode-control label {
     font-size: clamp(0.7rem, 3.25vw, 0.92rem);
@@ -1287,13 +1294,7 @@ kbd {
   }
 }
 
-@media (max-width: 370px) {
-  .answer-button-row > .key-hint {
-    left: calc(100% + 1px);
-  }
-}
-
-@media (max-width: 350px) {
+@media (max-width: 405px) {
   .control-panel {
     grid-template-areas:
       "lcd lcd"
@@ -1315,6 +1316,17 @@ kbd {
 
   .mode-scale {
     font-size: 0.52rem;
+  }
+}
+
+@media (max-width: 300px) {
+  .feedback-panel {
+    grid-template-columns: minmax(68px, 1fr) minmax(70px, 1fr) minmax(68px, 1fr);
+    padding-inline: 0;
+  }
+
+  .feedback-panel > p {
+    font-size: 0.56rem;
   }
 }
 

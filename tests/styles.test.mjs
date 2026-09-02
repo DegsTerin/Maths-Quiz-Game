@@ -86,11 +86,15 @@ test("keyboard shortcuts do not shift their centred controls", () => {
   assert.match(getRule(".answer-button-row,\n.control-shortcut-row"), /justify-self:\s*center/);
   assert.match(getRule(".answer-button-row > .key-hint,\n.control-shortcut-row > kbd"), /position:\s*absolute/);
   assert.match(getRule(".answer-button-row > .key-hint,\n.control-shortcut-row > kbd"), /left:\s*calc\(100% \+ clamp\(5px,\s*1vw,\s*12px\)\)/);
-  assert.match(stylesheet, /@media \(max-width:\s*370px\)[\s\S]*?\.answer-button-row > \.key-hint\s*{[\s\S]*?left:\s*calc\(100% \+ 1px\)/);
+  assert.match(stylesheet, /@media \(max-width:\s*720px\)[\s\S]*?\.answer-button-row > \.key-hint\s*{[^}]*right:\s*-11px;[^}]*left:\s*auto/);
+  assert.match(stylesheet, /@media \(max-width:\s*720px\)[\s\S]*?\.control-shortcut-row > kbd\s*{[^}]*right:\s*-5px;[^}]*left:\s*auto/);
 });
 
 test("the mobile LCD leaves room for centred controls and their shortcuts", () => {
-  assert.match(stylesheet, /@media \(max-width:\s*430px\)[\s\S]*?\.lcd-module\s*{[^}]*width:\s*calc\(100% - 24px\);[^}]*justify-self:\s*center/);
+  assert.match(stylesheet, /@media \(max-width:\s*720px\)[\s\S]*?\.lcd-module\s*{[^}]*width:\s*calc\(100% - 24px\);[^}]*justify-self:\s*center/);
+  assert.match(stylesheet, /@media \(max-width:\s*405px\)[\s\S]*?\.control-panel\s*{[^}]*grid-template-areas:\s*"lcd lcd"\s*"reset mode"/);
+  assert.match(getRule("html"), /min-width:\s*280px/);
+  assert.match(stylesheet, /@media \(max-width:\s*300px\)[\s\S]*?\.feedback-panel\s*{[^}]*grid-template-columns:\s*minmax\(68px,\s*1fr\)\s*minmax\(70px,\s*1fr\)\s*minmax\(68px,\s*1fr\)/);
 });
 
 test("correct and incorrect indicators use separate labelled plates", () => {
@@ -101,7 +105,7 @@ test("correct and incorrect indicators use separate labelled plates", () => {
 
 test("the page requests the current tab-free stylesheet and iPhone feedback script", () => {
   assert.match(page, /rel="icon" href="\.\/favicon\.svg\?v=20260902"/);
-  assert.match(page, /href="\.\/styles\.css\?v=20260902-aligned-shortcuts"/);
+  assert.match(page, /href="\.\/styles\.css\?v=20260902-contained-shortcuts"/);
   assert.match(page, /src="\.\/js\/app\.js\?v=20260902-iphone-feedback"/);
   assert.match(application, /from "\.\/buzzer\.js\?v=20260902-iphone-feedback"/);
   assert.match(application, /from "\.\/game-engine\.js\?v=20260902-mode-shortcut"/);

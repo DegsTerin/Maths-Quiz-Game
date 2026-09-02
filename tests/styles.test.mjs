@@ -19,6 +19,13 @@ function getCustomProperty(rule, property) {
   return match[1].trim();
 }
 
+function getDeclaration(rule, property) {
+  const escapedProperty = property.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = rule.match(new RegExp(`${escapedProperty}:\\s*([^;]+);`));
+  assert.ok(match, `Missing declaration: ${property}`);
+  return match[1].trim();
+}
+
 test("dark and light themes provide distinct hardware surfaces", () => {
   const darkTheme = getRule(":root");
   const lightTheme = getRule('html[data-theme="light"]');
@@ -88,11 +95,14 @@ test("correct and incorrect answers use distinct high-contrast outlines", () => 
   assert.match(correctAnswer, /box-shadow:[\s\S]*0 0 0 5px #44d56b[\s\S]*0 0 30px rgb\(45 210 101 \/ 62%\)/);
 });
 
-test("correct-answer blinking hides only the illuminated number segments", () => {
-  const hiddenNumber = getRule(".segment-display.is-hidden .segment.is-on");
+test("correct-answer blinking dims the number into the stable display background", () => {
+  const inactiveSegment = getRule(".segment-display .segment");
+  const dimmedNumber = getRule(".segment-display.is-hidden .segment.is-on");
 
-  assert.match(hiddenNumber, /opacity:\s*0/);
-  assert.match(hiddenNumber, /filter:\s*none/);
+  assert.equal(getDeclaration(dimmedNumber, "fill"), getDeclaration(inactiveSegment, "fill"));
+  assert.equal(getDeclaration(dimmedNumber, "opacity"), getDeclaration(inactiveSegment, "opacity"));
+  assert.match(dimmedNumber, /filter:\s*none/);
+  assert.doesNotMatch(dimmedNumber, /opacity:\s*0(?:;|\s)/);
   assert.doesNotMatch(stylesheet, /\.segment-display\.is-hidden svg\s*\{/);
 });
 
@@ -141,7 +151,7 @@ test("correct and incorrect indicators use separate labelled plates", () => {
 
 test("the page requests the current feedback stylesheet and iPhone feedback script", () => {
   assert.match(page, /rel="icon" href="\.\/favicon\.svg\?v=20260902"/);
-  assert.match(page, /href="\.\/styles\.css\?v=20260902-answer-feedback-states"/);
+  assert.match(page, /href="\.\/styles\.css\?v=20260902-stable-display-background"/);
   assert.match(page, /src="\.\/js\/app\.js\?v=20260902-lcd-project-credit"/);
   assert.match(application, /from "\.\/buzzer\.js\?v=20260902-iphone-feedback"/);
   assert.match(application, /from "\.\/game-engine\.js\?v=20260902-mode-shortcut"/);
